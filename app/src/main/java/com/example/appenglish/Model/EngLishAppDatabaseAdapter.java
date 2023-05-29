@@ -21,7 +21,7 @@ public class EngLishAppDatabaseAdapter {
     public static final  String TABLE_NAME = "USERS";
     public static final int DATABASE_VERSION = 1;
     // Câu lệnh SQL tạo mới cơ sở dữ liệu.
-    public static final String DATABASE_CREATE = "create table "+TABLE_NAME+"( ID integer primary key autoincrement,user_name  text,password  text,lv text,role text); ";
+    public static final String DATABASE_CREATE = "create table "+TABLE_NAME+"(user_name  text primary key,password  text,lv text,role text); ";
     private static final String TAG = "EngLishAppDatabaseAdapter";
 
     // Khai báo biên db kiểm SQLiteDatabase để thực thi các phương thức với cơ sở dữ liệu
@@ -87,7 +87,6 @@ public class EngLishAppDatabaseAdapter {
         while (projCursor.moveToNext()) {
 
             user = new User();
-            user.setID(projCursor.getString(projCursor.getColumnIndexOrThrow("ID")));
             user.setUser_name(projCursor.getString(projCursor.getColumnIndexOrThrow("user_name")));
             user.setPassword(projCursor.getString(projCursor.getColumnIndexOrThrow("password")));
             user.setLv(projCursor.getString(projCursor.getColumnIndexOrThrow("lv")));
@@ -105,5 +104,13 @@ public class EngLishAppDatabaseAdapter {
         Toast.makeText(this.context.getApplicationContext(),"Row Count is "+cursor.getCount(),Toast.LENGTH_LONG).show();
         db.close();
         return cursor.getCount();
+    }
+    // Phương thức xoá tất cả các bản ghi trong bảng Table
+    public void truncateTable()
+    {
+        db=dbHelper.getReadableDatabase();
+        db.delete(TABLE_NAME, "1", null);
+        db.close();
+        Toast.makeText(context.getApplicationContext(),"Table Data Truncated!",Toast.LENGTH_LONG).show();
     }
 }

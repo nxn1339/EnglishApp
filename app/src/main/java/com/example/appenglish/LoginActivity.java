@@ -51,8 +51,8 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-//                engLishAppDatabaseAdapter.insertEntry("a","1","0","1");
 
+//                engLishAppDatabaseAdapter.truncateTable();
                 if(checkLogin(txtUserName.getText().toString().trim(),txtPassword.getText().toString().trim())==true){
                     //tạo accivity home
                     Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
@@ -71,10 +71,13 @@ public class LoginActivity extends AppCompatActivity {
         tvResgister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //tạo accivity đăng ký
-                Intent i = new Intent(getApplicationContext(), ResgisterScreen.class);
-                //đi đến acctivity đăng ký
-                startActivity(i);
+//                //tạo accivity đăng ký
+//                Intent i = new Intent(getApplicationContext(), ResgisterScreen.class);
+//                //đi đến acctivity đăng ký
+//                startActivity(i);
+                engLishAppDatabaseAdapter.insertEntry("admin","1","0","1");
+                engLishAppDatabaseAdapter.insertEntry("ngat","1","0","1");
+                engLishAppDatabaseAdapter.insertEntry("dieu","1","0","1");
             }
         });
 

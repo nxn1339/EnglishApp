@@ -1,7 +1,6 @@
 package com.example.appenglish.Model;
 
 public class User {
-    private String ID;
     private String user_name;
     private String password;
     private String lv;
@@ -28,14 +27,6 @@ public class User {
 
     }
 
-    public String getID() {
-        return ID;
-    }
-
-    public void setID(String ID) {
-        this.ID = ID;
-    }
-
 
     public String getRole() {
         return role;
@@ -54,11 +45,9 @@ public class User {
         this.lv = lv;
     }
 
-    public User(String id, String user_name, String password, String lv, String role) {
-        ID = id;
+    public User( String user_name, String password, String lv, String role) {
         this.user_name = user_name;
         this.password = password;
-
         this.lv = lv;
         this.role = role;
     }

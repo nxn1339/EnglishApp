@@ -85,14 +85,15 @@
                 app:endIconMode="password_toggle"
                 app:endIconTint="@color/teal_700"
                 android:inputType="textPassword">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtPassword"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:maxLines="1"
                     android:lines="1"
-                    android:singleLine="true"
-                    />
+                    android:maxLines="1"
+                    app:password="true"
+                    android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
