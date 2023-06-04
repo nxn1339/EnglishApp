@@ -12,7 +12,7 @@
         android:theme="@style/Theme.AppEnglish"
         tools:targetApi="31">
         <activity
-            android:name=".ResgisterScreen"
+            android:name=".RegisterScreen"
             android:exported="false" />
         <activity
             android:name=".LearningScreen"

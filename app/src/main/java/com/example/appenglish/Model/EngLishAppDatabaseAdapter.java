@@ -16,12 +16,39 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 public class EngLishAppDatabaseAdapter {
-    public static  ArrayList<User> users=new ArrayList<>();
+    public static Boolean isCheckCreateUser = true;
     public static final String DATABASE_NAME = "dbEngLishApp.db";
-    public static final  String TABLE_NAME = "USERS";
+    public static final  String TABLE_USER = "User";
+
+    public static final String TABLE_TOPIC ="Topic";
+
+    public static final String TABLE_USER_TOPIC ="UserTopic";
     public static final int DATABASE_VERSION = 1;
     // Câu lệnh SQL tạo mới cơ sở dữ liệu.
-    public static final String DATABASE_CREATE = "create table "+TABLE_NAME+"(user_name  text primary key,password  text,lv text,role text); ";
+    public static final String DATABASE_CREATE_USER = "create table "+TABLE_USER+"(\n" +
+            "\t\"id_user\"\tINTEGER NOT NULL,\n" +
+            "\t\"user_name\"\ttext NOT NULL UNIQUE,\n" +
+            "\t\"password\"\ttext NOT NULL,\n" +
+            "\t\"lv\"\ttext NOT NULL,\n" +
+            "\t\"role\"\ttext NOT NULL,\n" +
+            "\tPRIMARY KEY(\"id_user\" AUTOINCREMENT)\n" +
+            "); ";
+    public static final String DATABASE_CREATE_TOPIC = "create table "+TABLE_TOPIC+"(\n" +
+            "\t\"id_topic\"\tINTEGER NOT NULL,\n" +
+            "\t\"title\"\tTEXT NOT NULL,\n" +
+            "\t\"point\"\tINTEGER NOT NULL,\n" +
+            "\t\"img\"\tTEXT NOT NULL,\n" +
+            "\tPRIMARY KEY(\"id_topic\" AUTOINCREMENT)\n" +
+            ");";
+    public static final String DATABASE_CREATE_USER_TOPIC = "create table "+TABLE_USER_TOPIC+"(\n" +
+            "\t\"id_user_topic\"\tINTEGER NOT NULL,\n" +
+            "\t\"id_user\"\tINTEGER,\n" +
+            "\t\"id_topic\"\tINTEGER,\n" +
+            "\tPRIMARY KEY(\"id_user_topic\" AUTOINCREMENT),\n" +
+            "\tFOREIGN KEY(\"id_topic\") REFERENCES \"Topic\"(\"id_topic\"),\n" +
+            "\tFOREIGN KEY(\"id_user\") REFERENCES \"USERS\"(\"id_user\")\n" +
+            ");";
+
     private static final String TAG = "EngLishAppDatabaseAdapter";
 
     // Khai báo biên db kiểm SQLiteDatabase để thực thi các phương thức với cơ sở dữ liệu
@@ -54,8 +81,9 @@ public class EngLishAppDatabaseAdapter {
     {
         return db;
     }
-    // Phương thức insert bản ghi vào Table
-    public String insertEntry(String user_name, String password, String lv,String role)
+    //========================== Phương thức insert ================================
+    //User
+    public String insertUser(String user_name, String password, String lv,String role)
     {
         try {
             ContentValues newValues = new ContentValues();
@@ -67,9 +95,15 @@ public class EngLishAppDatabaseAdapter {
 
             // Insert hàng dữ liệu vào table
             db = dbHelper.getWritableDatabase();
-            long result=db.insert(TABLE_NAME, null, newValues);
+            long result=db.insert(TABLE_USER, null, newValues);
+            //kiểm tra tạo tài khoản thành công không
+            if((int)result >0){
+                isCheckCreateUser = true;
+            }
+            else {
+                isCheckCreateUser = false;
+            }
             Log.i("Row Insert Result ", String.valueOf(result));
-            Utils.showToast(this.context.getApplicationContext(), "User Info Saved! Total Row Count is "+getRowCount());
             db.close();
 
         }catch(Exception ex) {
@@ -77,40 +111,156 @@ public class EngLishAppDatabaseAdapter {
         return "ok";
     }
 
-    // Phương thức lấy tất cả các hàng được lưu trong Table
-    public static ArrayList<User> getRows() throws JSONException {
+    // Topic
+    public String insertTopic(String title, int point, String img)
+    {
+        try {
+            ContentValues newValues = new ContentValues();
+            // Gán dữ liệu cho mỗi cột.
+            newValues.put("title", title);
+            newValues.put("point", point);
+            newValues.put("img", img);
 
-        users.clear();
+            // Insert hàng dữ liệu vào table
+            db = dbHelper.getWritableDatabase();
+            long result=db.insert(TABLE_TOPIC, null, newValues);
+            //kiểm tra tạo tài khoản thành công không
+            if((int)result >0){
+                isCheckCreateUser = true;
+            }
+            else {
+                isCheckCreateUser = false;
+            }
+            Log.i("Thêm tiêu đề:", String.valueOf(result));
+            db.close();
+
+        }catch(Exception ex) {
+        }
+        return "ok";
+    }
+
+    // Topic
+    public String insertUserTopic( int id_user, int id_topic){
+        try {
+            ContentValues newValues = new ContentValues();
+            // Gán dữ liệu cho mỗi cột.
+            newValues.put("id_user", id_user);
+            newValues.put("id_topic", id_topic);
+
+            // Insert hàng dữ liệu vào table
+            db = dbHelper.getWritableDatabase();
+            long result=db.insert(TABLE_TOPIC, null, newValues);
+            //kiểm tra tạo tài khoản thành công không
+            if((int)result >0){
+                isCheckCreateUser = true;
+            }
+            else {
+                isCheckCreateUser = false;
+            }
+            Log.i("Thêm Liên kết:", String.valueOf(result));
+            db.close();
+
+        }catch(Exception ex) {
+        }
+        return "ok";
+    }
+
+
+    //==================== Phương thức lấy tất cả các hàng được lưu trong Table=========================
+    //User
+    public static ArrayList<User> getRowUser() throws JSONException {
+
+        User.users.clear();
         User user;
         db=dbHelper.getReadableDatabase();
-        Cursor projCursor = db.query(TABLE_NAME, null, null,null, null, null, null,null);
+        Cursor projCursor = db.query(TABLE_USER, null, null,null, null, null, null,null);
         while (projCursor.moveToNext()) {
 
             user = new User();
+            user.setID(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_user"))));
             user.setUser_name(projCursor.getString(projCursor.getColumnIndexOrThrow("user_name")));
             user.setPassword(projCursor.getString(projCursor.getColumnIndexOrThrow("password")));
             user.setLv(projCursor.getString(projCursor.getColumnIndexOrThrow("lv")));
             user.setRole(projCursor.getString(projCursor.getColumnIndexOrThrow("role")));
-            users.add(user);
+            User.users.add(user);
         }
         projCursor.close();
-        return users;
-}
-    // Phương thức đếm tổng số bản ghi trong Table
-    public int getRowCount()
+        return User.users;
+    }
+    //Topic
+    public static ArrayList<Topic> getRowTopic() throws JSONException {
+
+        Topic.topics.clear();
+        Topic topic;
+        db=dbHelper.getReadableDatabase();
+        Cursor projCursor = db.query(TABLE_TOPIC, null, null,null, null, null, null,null);
+        while (projCursor.moveToNext()) {
+
+            topic = new Topic();
+            topic.setId_topic(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_topic"))));
+            topic.setTitle(projCursor.getString(projCursor.getColumnIndexOrThrow("title")));
+            topic.setPoint(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("point"))));
+            topic.setImg(projCursor.getString(projCursor.getColumnIndexOrThrow("img")));
+            Topic.topics.add(topic);
+        }
+        projCursor.close();
+        return Topic.topics;
+    }
+
+    //User Topic
+    public static ArrayList<UserTopic> getRowUserTopic() throws JSONException {
+        UserTopic.userTopics.clear();
+        UserTopic userTopic;
+        db=dbHelper.getReadableDatabase();
+        Cursor projCursor = db.query(TABLE_USER_TOPIC, null, null,null, null, null, null,null);
+        while (projCursor.moveToNext()) {
+
+            userTopic = new UserTopic();
+            userTopic.setId_user_topic(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_user_topic"))));
+            userTopic.setId_user(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_user"))));
+            userTopic.setId_topic(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_topic"))));
+
+            UserTopic.userTopics.add(userTopic);
+        }
+        projCursor.close();
+        return UserTopic.userTopics;
+    }
+    //=========================== Phương thức đếm tổng số bản ghi trong Table==============================
+    public int getRowCountUser()
     {
         db=dbHelper.getReadableDatabase();
-        Cursor cursor=db.query(TABLE_NAME, null, null, null, null, null, null);
-        Toast.makeText(this.context.getApplicationContext(),"Row Count is "+cursor.getCount(),Toast.LENGTH_LONG).show();
+        Cursor cursor=db.query(TABLE_USER, null, null, null, null, null, null);
         db.close();
         return cursor.getCount();
     }
+    //Topic
+    public int getRowCountTopic()
+    {
+        db=dbHelper.getReadableDatabase();
+        Cursor cursor=db.query(TABLE_TOPIC, null, null, null, null, null, null);
+        db.close();
+        return cursor.getCount();
+    }
+    //User Topic
+    public int getRowCountUserTopic()
+    {
+        db=dbHelper.getReadableDatabase();
+        Cursor cursor=db.query(TABLE_USER_TOPIC, null, null, null, null, null, null);
+        db.close();
+        return cursor.getCount();
+    }
+
     // Phương thức xoá tất cả các bản ghi trong bảng Table
     public void truncateTable()
     {
         db=dbHelper.getReadableDatabase();
-        db.delete(TABLE_NAME, "1", null);
+        db.delete(TABLE_USER, "1", null);
+        db.delete(TABLE_TOPIC, "1", null);
+        db.delete(TABLE_USER_TOPIC, "1", null);
         db.close();
-        Toast.makeText(context.getApplicationContext(),"Table Data Truncated!",Toast.LENGTH_LONG).show();
+        User.users.clear();
+        Topic.topics.clear();
+        UserTopic.userTopics.clear();
+        Toast.makeText(context.getApplicationContext(),"Xóa tất cả thành công!",Toast.LENGTH_LONG).show();
     }
 }

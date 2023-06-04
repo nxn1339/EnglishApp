@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.appenglish.Model.PlayScreen;
+import com.example.appenglish.Model.Topic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ public class FragmentHome extends Fragment {
     private View view;
 
     private PlayAdapter playAdapter;
+
 
 
 
@@ -37,9 +40,10 @@ public class FragmentHome extends Fragment {
         playAdapter.setData(getListPlayScreen(), new PlayAdapter.IClickPlayLevelListener() {
             @Override
             public void onClickPlayLevel(ImageView imgPlay, PlayScreen playScreen) {
-                Toast.makeText(getContext(),playScreen.getID(), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getActivity().getApplicationContext(), LearningScreen.class);
-                intent.putExtra("id",playScreen.getID());
+                Toast.makeText(getContext(),String.valueOf(playScreen.getID()), Toast.LENGTH_LONG).show();
+                Log.i("HAHHA",String.valueOf(playScreen.getID()));
+                Intent intent = new Intent(getActivity(), LearningScreen.class);
+                intent.putExtra("id",String.valueOf(playScreen.getID()));
                 startActivity(intent);
             }
         });
@@ -49,12 +53,26 @@ public class FragmentHome extends Fragment {
 
     private List<PlayScreen> getListPlayScreen(){
         List<PlayScreen> list = new ArrayList<>();
-        list.add(new PlayScreen("1", R.drawable.lv1,"Chào Hỏi","0/10"));
-        list.add(new PlayScreen("2", R.drawable.lv2,"Màu Sắc","0/10"));
-        list.add(new PlayScreen("3", R.drawable.lv3,"Quốc Gia","0/10"));
-        list.add(new PlayScreen("4", R.drawable.lv4,"Trường Học","0/10"));
-        list.add(new PlayScreen("5", R.drawable.lv5,"Thời Tiết","0/10"));
-
+        for(int i = 0; i< Topic.topics.size(); i++){
+            list.add(new PlayScreen(Topic.topics.get(i).getId_topic(),images(i),Topic.topics.get(i).getPoint()+"/10", Topic.topics.get(i).getImg()));
+        }
         return list;
+    }
+    private int images(int i){
+        switch (i){
+            case 0:
+                return R.drawable.lv1;
+            case 1:
+                return R.drawable.lv2;
+            case 2:
+                return R.drawable.lv3;
+            case 3:
+                return R.drawable.lv4;
+            case 4:
+                return R.drawable.lv5;
+            default:
+                return R.drawable.lv1;
+
+        }
     }
 }

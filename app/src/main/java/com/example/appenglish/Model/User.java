@@ -1,9 +1,22 @@
 package com.example.appenglish.Model;
 
+import java.util.ArrayList;
+
 public class User {
+    private int ID;
     private String user_name;
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
     private String password;
     private String lv;
+    public static ArrayList<User> users=new ArrayList<>();
 
     public String getUser_name() {
         return user_name;
@@ -45,7 +58,8 @@ public class User {
         this.lv = lv;
     }
 
-    public User( String user_name, String password, String lv, String role) {
+    public User(int id, String user_name, String password, String lv, String role) {
+        ID = id;
         this.user_name = user_name;
         this.password = password;
         this.lv = lv;
