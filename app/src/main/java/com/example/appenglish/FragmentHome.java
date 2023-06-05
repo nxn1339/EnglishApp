@@ -1,6 +1,8 @@
 package com.example.appenglish;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,10 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.appenglish.Model.PlayScreen;
 import com.example.appenglish.Model.Topic;
+import com.example.appenglish.Model.UserTopic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +27,9 @@ import java.util.List;
 public class FragmentHome extends Fragment {
     private RecyclerView rcvPlayScreen;
     private View view;
+    private TextView tvLevel;
 
     private PlayAdapter playAdapter;
-
 
 
 
@@ -34,6 +38,8 @@ public class FragmentHome extends Fragment {
                              Bundle savedInstanceState) {
         view =inflater.inflate(R.layout.fragment_home, container, false);
         rcvPlayScreen = view.findViewById(R.id.rcvPlayScreen);
+        tvLevel = view.findViewById(R.id.tvLevel);
+        tvLevel.setText(LoginActivity.user.getLv());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         rcvPlayScreen.setLayoutManager(linearLayoutManager);
         playAdapter = new PlayAdapter();
@@ -41,7 +47,6 @@ public class FragmentHome extends Fragment {
             @Override
             public void onClickPlayLevel(ImageView imgPlay, PlayScreen playScreen) {
                 Toast.makeText(getContext(),String.valueOf(playScreen.getID()), Toast.LENGTH_LONG).show();
-                Log.i("HAHHA",String.valueOf(playScreen.getID()));
                 Intent intent = new Intent(getActivity(), LearningScreen.class);
                 intent.putExtra("id",String.valueOf(playScreen.getID()));
                 startActivity(intent);
@@ -54,7 +59,7 @@ public class FragmentHome extends Fragment {
     private List<PlayScreen> getListPlayScreen(){
         List<PlayScreen> list = new ArrayList<>();
         for(int i = 0; i< Topic.topics.size(); i++){
-            list.add(new PlayScreen(Topic.topics.get(i).getId_topic(),images(i),Topic.topics.get(i).getPoint()+"/10", Topic.topics.get(i).getImg()));
+            list.add(new PlayScreen(Topic.topics.get(i).getId_topic(),images(i),Topic.topics.get(i).getTitle(), UserTopic.userTopics.get(i).getPoint() +"/10"));
         }
         return list;
     }

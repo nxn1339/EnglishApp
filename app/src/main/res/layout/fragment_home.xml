@@ -36,7 +36,7 @@
             app:tint="#E208E3E3" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/tvLevel"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="15dp"

@@ -6,7 +6,6 @@ public class Topic {
     public static ArrayList<Topic> topics=new ArrayList<>();
     private int id_topic;
     private String title;
-    private int point;
     private String img;
 
     public Topic() {
@@ -29,13 +28,7 @@ public class Topic {
         this.title = title;
     }
 
-    public int getPoint() {
-        return point;
-    }
 
-    public void setPoint(int point) {
-        this.point = point;
-    }
 
     public String getImg() {
         return img;
@@ -45,10 +38,9 @@ public class Topic {
         this.img = img;
     }
 
-    public Topic(int id_topic, String title, int point, String img) {
+    public Topic(int id_topic, String title, String img) {
         this.id_topic = id_topic;
         this.title = title;
-        this.point = point;
         this.img = img;
     }
 }

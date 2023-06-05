@@ -1,8 +1,5 @@
 package com.example.appenglish;
 
-import static com.example.appenglish.Model.EngLishAppDatabaseAdapter.TABLE_TOPIC;
-import static com.example.appenglish.Model.EngLishAppDatabaseAdapter.TABLE_USER;
-import static com.example.appenglish.Model.EngLishAppDatabaseAdapter.TABLE_USER_TOPIC;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 
+import com.example.appenglish.Model.Database;
 import com.example.appenglish.Model.EngLishAppDatabaseAdapter;
 
 public class DatabaseAppHelper extends SQLiteOpenHelper {
@@ -20,9 +18,10 @@ public class DatabaseAppHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase _db) {
         try {
-            _db.execSQL(EngLishAppDatabaseAdapter.DATABASE_CREATE_USER);
-            _db.execSQL(EngLishAppDatabaseAdapter.DATABASE_CREATE_TOPIC);
-            _db.execSQL(EngLishAppDatabaseAdapter.DATABASE_CREATE_USER_TOPIC);
+            _db.execSQL(Database.DATABASE_CREATE_USER);
+            _db.execSQL(Database.DATABASE_CREATE_TOPIC);
+            _db.execSQL(Database.DATABASE_CREATE_USER_TOPIC);
+            _db.execSQL(Database.DATABASE_CREATE_QUESTION);
         }catch(Exception er){
             Log.e("Error","exceptioin");
         }
@@ -31,9 +30,10 @@ public class DatabaseAppHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase _db, int _oldVersion, int _newVersion)
     {
-        _db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
-        _db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOPIC);
-        _db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_TOPIC);
+        _db.execSQL("DROP TABLE IF EXISTS " + Database.TABLE_USER);
+        _db.execSQL("DROP TABLE IF EXISTS " + Database.TABLE_TOPIC);
+        _db.execSQL("DROP TABLE IF EXISTS " + Database.TABLE_USER_TOPIC);
+        _db.execSQL("DROP TABLE IF EXISTS " + Database.TABLE_QUESTION);
         // Tạo một database mới.
         onCreate(_db);
     }

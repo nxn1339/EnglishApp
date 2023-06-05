@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.appenglish.Model.EngLishAppDatabaseAdapter;
 import com.example.appenglish.Model.Topic;
@@ -21,8 +20,6 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
 
-import java.util.ArrayList;
-
 public class LoginActivity extends AppCompatActivity {
     private TextView tvResgister;
     private Button btnLogin;
@@ -32,9 +29,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private
     EngLishAppDatabaseAdapter engLishAppDatabaseAdapter;
-    private String userName;
-    private String password;
     private Context context;
+    public static User user = new User();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +54,14 @@ public class LoginActivity extends AppCompatActivity {
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
             String userName = sharedPreferences.getString("USERNAME", "");
             String password = sharedPreferences.getString("PASSWORD", "");
+            int id_user = sharedPreferences.getInt("ID_USER",1);
+            String lv = sharedPreferences.getString("LV", "");
+            user.setID(id_user);
+            user.setUser_name("");
+            user.setPassword("");
+            user.setRole("");
+            user.setLv(lv);
+
             if(checkLogin(userName,password)==true){
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 Utils.showToast(getBaseContext(), "Đăng nhập thành công !");
@@ -75,6 +79,15 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                //Lấy dữ liệu
+                try {
+                    User.users = engLishAppDatabaseAdapter.getRowUser();
+                    Topic.topics =engLishAppDatabaseAdapter.getRowTopic();
+                    UserTopic.userTopics =engLishAppDatabaseAdapter.getRowUserTopic();
+                } catch (JSONException e) {
+                    Log.i("Lỗi ở đăng nhập","Sửa đi");
+                    e.printStackTrace();
+                }
 //                engLishAppDatabaseAdapter.truncateTable();
                 if(checkLogin(txtUserName.getText().toString().trim(),txtPassword.getText().toString().trim())==true){
                     //tạo accivity home
@@ -111,17 +124,20 @@ public class LoginActivity extends AppCompatActivity {
         for (int i=0;i<User.users.toArray().length;i++){
             if(userName.equals(User.users.get(i).getUser_name()) && password.equals(User.users.get(i).getPassword())){
                 //lưu user cho lần sau
-                saveUser(userName,password);
+                saveUser(userName,password,User.users.get(i).getID(),User.users.get(i).getLv());
                 return true;
             }
         }
         return false;
     }
-   private void saveUser(String userName,String password){
+    private  void saveUser(String userName,String password,int id_user,String lv){
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor user = sharedPreferences.edit();
         user.putString("USERNAME", userName); // Lưu một chuỗi với khóa "key"
         user.putString("PASSWORD", password); // Lưu một chuỗi với khóa "key"
+        user.putInt("ID_USER",id_user);
+        user.putString("LV",lv);
         user.apply(); // Áp dụng các thay đổi vào Shared Preferences
     }
+
 }

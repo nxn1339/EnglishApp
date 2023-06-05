@@ -9,7 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.appenglish.DatabaseAppHelper;
-import com.example.appenglish.Utils.Utils;
+import com.example.appenglish.LoginActivity;
 
 import org.json.JSONException;
 
@@ -17,39 +17,7 @@ import java.util.ArrayList;
 
 public class EngLishAppDatabaseAdapter {
     public static Boolean isCheckCreateUser = true;
-    public static final String DATABASE_NAME = "dbEngLishApp.db";
-    public static final  String TABLE_USER = "User";
 
-    public static final String TABLE_TOPIC ="Topic";
-
-    public static final String TABLE_USER_TOPIC ="UserTopic";
-    public static final int DATABASE_VERSION = 1;
-    // Câu lệnh SQL tạo mới cơ sở dữ liệu.
-    public static final String DATABASE_CREATE_USER = "create table "+TABLE_USER+"(\n" +
-            "\t\"id_user\"\tINTEGER NOT NULL,\n" +
-            "\t\"user_name\"\ttext NOT NULL UNIQUE,\n" +
-            "\t\"password\"\ttext NOT NULL,\n" +
-            "\t\"lv\"\ttext NOT NULL,\n" +
-            "\t\"role\"\ttext NOT NULL,\n" +
-            "\tPRIMARY KEY(\"id_user\" AUTOINCREMENT)\n" +
-            "); ";
-    public static final String DATABASE_CREATE_TOPIC = "create table "+TABLE_TOPIC+"(\n" +
-            "\t\"id_topic\"\tINTEGER NOT NULL,\n" +
-            "\t\"title\"\tTEXT NOT NULL,\n" +
-            "\t\"point\"\tINTEGER NOT NULL,\n" +
-            "\t\"img\"\tTEXT NOT NULL,\n" +
-            "\tPRIMARY KEY(\"id_topic\" AUTOINCREMENT)\n" +
-            ");";
-    public static final String DATABASE_CREATE_USER_TOPIC = "create table "+TABLE_USER_TOPIC+"(\n" +
-            "\t\"id_user_topic\"\tINTEGER NOT NULL,\n" +
-            "\t\"id_user\"\tINTEGER,\n" +
-            "\t\"id_topic\"\tINTEGER,\n" +
-            "\tPRIMARY KEY(\"id_user_topic\" AUTOINCREMENT),\n" +
-            "\tFOREIGN KEY(\"id_topic\") REFERENCES \"Topic\"(\"id_topic\"),\n" +
-            "\tFOREIGN KEY(\"id_user\") REFERENCES \"USERS\"(\"id_user\")\n" +
-            ");";
-
-    private static final String TAG = "EngLishAppDatabaseAdapter";
 
     // Khai báo biên db kiểm SQLiteDatabase để thực thi các phương thức với cơ sở dữ liệu
     public static SQLiteDatabase db;
@@ -61,7 +29,7 @@ public class EngLishAppDatabaseAdapter {
     public EngLishAppDatabaseAdapter(Context _context)
     {
         context = _context;
-        dbHelper = new DatabaseAppHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
+        dbHelper = new DatabaseAppHelper(context, Database.DATABASE_NAME, null, Database.DATABASE_VERSION);
     }
 
     // Phương thức mở Database
@@ -95,7 +63,7 @@ public class EngLishAppDatabaseAdapter {
 
             // Insert hàng dữ liệu vào table
             db = dbHelper.getWritableDatabase();
-            long result=db.insert(TABLE_USER, null, newValues);
+            long result=db.insert(Database.TABLE_USER, null, newValues);
             //kiểm tra tạo tài khoản thành công không
             if((int)result >0){
                 isCheckCreateUser = true;
@@ -112,18 +80,17 @@ public class EngLishAppDatabaseAdapter {
     }
 
     // Topic
-    public String insertTopic(String title, int point, String img)
+    public String insertTopic(String title, String img)
     {
         try {
             ContentValues newValues = new ContentValues();
             // Gán dữ liệu cho mỗi cột.
             newValues.put("title", title);
-            newValues.put("point", point);
             newValues.put("img", img);
 
             // Insert hàng dữ liệu vào table
             db = dbHelper.getWritableDatabase();
-            long result=db.insert(TABLE_TOPIC, null, newValues);
+            long result=db.insert(Database.TABLE_TOPIC, null, newValues);
             //kiểm tra tạo tài khoản thành công không
             if((int)result >0){
                 isCheckCreateUser = true;
@@ -140,16 +107,17 @@ public class EngLishAppDatabaseAdapter {
     }
 
     // Topic
-    public String insertUserTopic( int id_user, int id_topic){
+    public String insertUserTopic( int id_user, int id_topic,int point){
         try {
             ContentValues newValues = new ContentValues();
             // Gán dữ liệu cho mỗi cột.
             newValues.put("id_user", id_user);
             newValues.put("id_topic", id_topic);
+            newValues.put("point", point);
 
             // Insert hàng dữ liệu vào table
             db = dbHelper.getWritableDatabase();
-            long result=db.insert(TABLE_TOPIC, null, newValues);
+            long result=db.insert(Database.TABLE_USER_TOPIC, null, newValues);
             //kiểm tra tạo tài khoản thành công không
             if((int)result >0){
                 isCheckCreateUser = true;
@@ -158,6 +126,31 @@ public class EngLishAppDatabaseAdapter {
                 isCheckCreateUser = false;
             }
             Log.i("Thêm Liên kết:", String.valueOf(result));
+            db.close();
+
+        }catch(Exception ex) {
+        }
+        return "ok";
+    }
+    //Question
+    public String insertQuestion(int id_topic,String question){
+        try {
+            ContentValues newValues = new ContentValues();
+            // Gán dữ liệu cho mỗi cột.
+            newValues.put("id_topic", id_topic);
+            newValues.put("question", question);
+
+            // Insert hàng dữ liệu vào table
+            db = dbHelper.getWritableDatabase();
+            long result=db.insert(Database.TABLE_QUESTION, null, newValues);
+            //kiểm tra tạo tài khoản thành công không
+            if((int)result >0){
+                isCheckCreateUser = true;
+            }
+            else {
+                isCheckCreateUser = false;
+            }
+            Log.i("Thêm Câu Hỏi:", String.valueOf(result));
             db.close();
 
         }catch(Exception ex) {
@@ -173,7 +166,7 @@ public class EngLishAppDatabaseAdapter {
         User.users.clear();
         User user;
         db=dbHelper.getReadableDatabase();
-        Cursor projCursor = db.query(TABLE_USER, null, null,null, null, null, null,null);
+        Cursor projCursor = db.query(Database.TABLE_USER, null, null,null, null, null, null,null);
         while (projCursor.moveToNext()) {
 
             user = new User();
@@ -193,13 +186,12 @@ public class EngLishAppDatabaseAdapter {
         Topic.topics.clear();
         Topic topic;
         db=dbHelper.getReadableDatabase();
-        Cursor projCursor = db.query(TABLE_TOPIC, null, null,null, null, null, null,null);
+        Cursor projCursor = db.query(Database.TABLE_TOPIC, null, null,null, null, null, null,null);
         while (projCursor.moveToNext()) {
 
             topic = new Topic();
             topic.setId_topic(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_topic"))));
             topic.setTitle(projCursor.getString(projCursor.getColumnIndexOrThrow("title")));
-            topic.setPoint(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("point"))));
             topic.setImg(projCursor.getString(projCursor.getColumnIndexOrThrow("img")));
             Topic.topics.add(topic);
         }
@@ -212,24 +204,65 @@ public class EngLishAppDatabaseAdapter {
         UserTopic.userTopics.clear();
         UserTopic userTopic;
         db=dbHelper.getReadableDatabase();
-        Cursor projCursor = db.query(TABLE_USER_TOPIC, null, null,null, null, null, null,null);
+        Cursor projCursor = db.rawQuery("SELECT * FROM UserTopic WHERE id_user = '"+ LoginActivity.user.getID()+"'",null);
         while (projCursor.moveToNext()) {
 
             userTopic = new UserTopic();
             userTopic.setId_user_topic(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_user_topic"))));
             userTopic.setId_user(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_user"))));
             userTopic.setId_topic(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_topic"))));
+            userTopic.setPoint(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("point"))));
 
             UserTopic.userTopics.add(userTopic);
         }
         projCursor.close();
         return UserTopic.userTopics;
     }
+    //Question của 1 Topic
+    public static ArrayList<Question> getRowOneTopicQuestion(int id_topic) throws JSONException {
+        Question.questions.clear();
+        Question question;
+        db=dbHelper.getReadableDatabase();
+        Cursor projCursor = db.rawQuery("SELECT * FROM Question WHERE id_topic = '"+ id_topic +"'",null);
+        while (projCursor.moveToNext()) {
+
+            question = new Question();
+            question.setId_question(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_question"))));
+            question.setId_topic(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_topic"))));
+            question.setQuestion(projCursor.getString(projCursor.getColumnIndexOrThrow("point")));
+
+            Question.questions.add(question);
+        }
+        projCursor.close();
+        return Question.questions;
+    }
+
+    //Question của tất cả topic
+    public static ArrayList<Question> getRowAllTopicQuestion() throws JSONException {
+        Question.questions.clear();
+        Question question;
+        db=dbHelper.getReadableDatabase();
+        Cursor projCursor = db.query(Database.TABLE_QUESTION,null,null,null,null,null,null);
+        while (projCursor.moveToNext()) {
+
+            question = new Question();
+            question.setId_question(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_question"))));
+            question.setId_topic(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_topic"))));
+            question.setQuestion(projCursor.getString(projCursor.getColumnIndexOrThrow("point")));
+
+            Question.questions.add(question);
+        }
+        projCursor.close();
+        return Question.questions;
+    }
+
+
+
     //=========================== Phương thức đếm tổng số bản ghi trong Table==============================
     public int getRowCountUser()
     {
         db=dbHelper.getReadableDatabase();
-        Cursor cursor=db.query(TABLE_USER, null, null, null, null, null, null);
+        Cursor cursor=db.query(Database.TABLE_USER, null, null, null, null, null, null);
         db.close();
         return cursor.getCount();
     }
@@ -237,7 +270,7 @@ public class EngLishAppDatabaseAdapter {
     public int getRowCountTopic()
     {
         db=dbHelper.getReadableDatabase();
-        Cursor cursor=db.query(TABLE_TOPIC, null, null, null, null, null, null);
+        Cursor cursor=db.query(Database.TABLE_TOPIC, null, null, null, null, null, null);
         db.close();
         return cursor.getCount();
     }
@@ -245,7 +278,7 @@ public class EngLishAppDatabaseAdapter {
     public int getRowCountUserTopic()
     {
         db=dbHelper.getReadableDatabase();
-        Cursor cursor=db.query(TABLE_USER_TOPIC, null, null, null, null, null, null);
+        Cursor cursor=db.query(Database.TABLE_USER_TOPIC, null, null, null, null, null, null);
         db.close();
         return cursor.getCount();
     }
@@ -254,9 +287,9 @@ public class EngLishAppDatabaseAdapter {
     public void truncateTable()
     {
         db=dbHelper.getReadableDatabase();
-        db.delete(TABLE_USER, "1", null);
-        db.delete(TABLE_TOPIC, "1", null);
-        db.delete(TABLE_USER_TOPIC, "1", null);
+        db.delete(Database.TABLE_USER, "1", null);
+        db.delete(Database.TABLE_TOPIC, "1", null);
+        db.delete(Database.TABLE_USER_TOPIC, "1", null);
         db.close();
         User.users.clear();
         Topic.topics.clear();

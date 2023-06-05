@@ -3,15 +3,15 @@ package com.example.appenglish.Model;
 import java.util.ArrayList;
 
 public class User {
-    private int ID;
+    private int id_user;
     private String user_name;
 
     public int getID() {
-        return ID;
+        return id_user;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setID(int id_user) {
+        this.id_user = id_user;
     }
 
     private String password;
@@ -58,8 +58,8 @@ public class User {
         this.lv = lv;
     }
 
-    public User(int id, String user_name, String password, String lv, String role) {
-        ID = id;
+    public User(int id_user, String user_name, String password, String lv, String role) {
+        this.id_user = id_user;
         this.user_name = user_name;
         this.password = password;
         this.lv = lv;
