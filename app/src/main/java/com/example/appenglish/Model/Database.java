@@ -8,6 +8,7 @@ public class Database {
     public static final String TABLE_QUESTION ="Question";
 
     public static final String TABLE_USER_TOPIC ="UserTopic";
+    public static final String TABLE_ANSWER ="Answer";
     public static final int DATABASE_VERSION = 1;
     // Câu lệnh SQL tạo mới cơ sở dữ liệu.
     public static final String DATABASE_CREATE_USER = "create table "+TABLE_USER+"(\n" +
@@ -36,9 +37,18 @@ public class Database {
     public static final String DATABASE_CREATE_QUESTION = "create table "+TABLE_QUESTION+"(\n" +
             "\t\"id_question\"\tINTEGER NOT NULL,\n" +
             "\t\"id_topic\"\tINTEGER DEFAULT NULL,\n" +
-            "\t\"question\"\tINTEGER,\n" +
-            "\tFOREIGN KEY(\"id_topic\") REFERENCES \"Topic\"(\"id_topic\"),\n" +
-            "\tPRIMARY KEY(\"id_question\" AUTOINCREMENT)\n" +
+            "\t\"question\"\tTEXT,\n" +
+            "\t\"type\"\tINTEGER,\n" +
+            "\tPRIMARY KEY(\"id_question\" AUTOINCREMENT),\n" +
+            "\tFOREIGN KEY(\"id_topic\") REFERENCES \"Topic\"(\"id_topic\")\n" +
+            ");";
+    public static final String DATABASE_CREATE_ANSWER= "create table "+TABLE_ANSWER+"(\n" +
+            "\t\"id_answer\"\tINTEGER NOT NULL,\n" +
+            "\t\"id_question\"\tINTEGER DEFAULT NULL,\n" +
+            "\t\"answer\"\tTEXT,\n" +
+            "\t\"correct\"\tINTEGER,\n" +
+            "\tPRIMARY KEY(\"id_answer\" AUTOINCREMENT),\n" +
+            "\tFOREIGN KEY(\"id_question\") REFERENCES \"Question\"(\"id_question\")\n" +
             ");";
 
     private static final String TAG = "EngLishAppDatabaseAdapter";

@@ -133,13 +133,13 @@ public class EngLishAppDatabaseAdapter {
         return "ok";
     }
     //Question
-    public String insertQuestion(int id_topic,String question){
+    public String insertQuestion(int id_topic,String question,int type){
         try {
             ContentValues newValues = new ContentValues();
             // Gán dữ liệu cho mỗi cột.
             newValues.put("id_topic", id_topic);
             newValues.put("question", question);
-
+            newValues.put("type", type);
             // Insert hàng dữ liệu vào table
             db = dbHelper.getWritableDatabase();
             long result=db.insert(Database.TABLE_QUESTION, null, newValues);
@@ -151,6 +151,32 @@ public class EngLishAppDatabaseAdapter {
                 isCheckCreateUser = false;
             }
             Log.i("Thêm Câu Hỏi:", String.valueOf(result));
+            db.close();
+
+        }catch(Exception ex) {
+        }
+        return "ok";
+    }
+
+    //Answer
+    public String insertAnswer(int id_question,String answer,int correct){
+        try {
+            ContentValues newValues = new ContentValues();
+            // Gán dữ liệu cho mỗi cột.
+            newValues.put("id_question", id_question);
+            newValues.put("answer", answer);
+            newValues.put("correct", correct);
+            // Insert hàng dữ liệu vào table
+            db = dbHelper.getWritableDatabase();
+            long result=db.insert(Database.TABLE_ANSWER, null, newValues);
+            //kiểm tra tạo tài khoản thành công không
+            if((int)result >0){
+                isCheckCreateUser = true;
+            }
+            else {
+                isCheckCreateUser = false;
+            }
+            Log.i("Thêm câu trả lời:", String.valueOf(result));
             db.close();
 
         }catch(Exception ex) {
@@ -204,7 +230,7 @@ public class EngLishAppDatabaseAdapter {
         UserTopic.userTopics.clear();
         UserTopic userTopic;
         db=dbHelper.getReadableDatabase();
-        Cursor projCursor = db.rawQuery("SELECT * FROM UserTopic WHERE id_user = '"+ LoginActivity.user.getID()+"'",null);
+        Cursor projCursor = db.rawQuery("SELECT * FROM '"+Database.TABLE_USER_TOPIC+"' WHERE id_user = '"+ LoginActivity.user.getID()+"'",null);
         while (projCursor.moveToNext()) {
 
             userTopic = new UserTopic();
@@ -223,13 +249,14 @@ public class EngLishAppDatabaseAdapter {
         Question.questions.clear();
         Question question;
         db=dbHelper.getReadableDatabase();
-        Cursor projCursor = db.rawQuery("SELECT * FROM Question WHERE id_topic = '"+ id_topic +"'",null);
+        Cursor projCursor = db.rawQuery("SELECT * FROM '"+Database.TABLE_QUESTION+"' WHERE id_topic = '"+ id_topic +"'",null);
         while (projCursor.moveToNext()) {
 
             question = new Question();
             question.setId_question(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_question"))));
             question.setId_topic(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_topic"))));
-            question.setQuestion(projCursor.getString(projCursor.getColumnIndexOrThrow("point")));
+            question.setQuestion(projCursor.getString(projCursor.getColumnIndexOrThrow("question")));
+            question.setType(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("type"))));
 
             Question.questions.add(question);
         }
@@ -248,12 +275,32 @@ public class EngLishAppDatabaseAdapter {
             question = new Question();
             question.setId_question(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_question"))));
             question.setId_topic(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_topic"))));
-            question.setQuestion(projCursor.getString(projCursor.getColumnIndexOrThrow("point")));
+            question.setQuestion(projCursor.getString(projCursor.getColumnIndexOrThrow("question")));
+            question.setType(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("type"))));
 
             Question.questions.add(question);
         }
         projCursor.close();
         return Question.questions;
+    }
+
+    //Answer
+    public static ArrayList<Answer> getRowAnswer(int id_question) throws JSONException {
+        Answer.answers.clear();
+        Answer answer;
+        db=dbHelper.getReadableDatabase();
+        Cursor projCursor = db.rawQuery("SELECT * FROM '"+Database.TABLE_ANSWER+"' WHERE id_question = '"+ id_question +"'",null);
+        while (projCursor.moveToNext()) {
+
+            answer = new Answer();
+            answer.setId_answer(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_answer"))));
+            answer.setId_question(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_question"))));
+            answer.setAnswer(projCursor.getString(projCursor.getColumnIndexOrThrow("answer")));
+            answer.setCorrect(projCursor.getInt(projCursor.getColumnIndexOrThrow("correct")));
+            Answer.answers.add(answer);
+        }
+        projCursor.close();
+        return Answer.answers;
     }
 
 

@@ -7,6 +7,15 @@ public class Question {
     private int id_question;
     private int id_topic;
     private String question;
+    private int type;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public Question(){
 
@@ -36,9 +45,10 @@ public class Question {
         this.question = question;
     }
 
-    public Question(int id_question, int id_topic, String question) {
+    public Question(int id_question, int id_topic, String question, int type) {
         this.id_question = id_question;
         this.id_topic = id_topic;
         this.question = question;
+        this.type = type;
     }
 }

@@ -3,15 +3,14 @@ package com.example.appenglish;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.appenglish.Model.Answer;
 import com.example.appenglish.Model.EngLishAppDatabaseAdapter;
 import com.example.appenglish.Model.Question;
 import com.example.appenglish.Model.Topic;
 import com.example.appenglish.Model.User;
-import com.example.appenglish.Model.UserTopic;
 import com.example.appenglish.Utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -95,20 +94,80 @@ public class RegisterScreen extends AppCompatActivity {
                             "Good morning là gì ?",
                             "Good afternoon là gì ?",
                             "Nice to .... you",
-                            ".... My name Tom",
+                            "Hello My .... Tom",
                             "What do you do ?",
                             "Tôi khỏe cảm ơn",
-                            "Tôi làm công nghệ thông tin",
+                            "Tôi học công nghệ thông tin",
                             "How are you?",
                             "How are you doing?"
                     };
+            int [] type ={1,1,1,2,2,1,1,1,1,1};
             for (int i = 0; i < 10; i++) {
-                engLishAppDatabaseAdapter.insertQuestion(1,question[i]);
+                engLishAppDatabaseAdapter.insertQuestion(1,question[i],type[i]);
             }
+            try {
+                Question.questions =engLishAppDatabaseAdapter.getRowAllTopicQuestion();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Answer[] answer =
+                    {       new Answer(0,1,"Xin chào", 1),
+                            new Answer(0,1,"Chào buổi sáng", 0),
+                            new Answer(0,1,"Chào buổi chiều", 0),
+                            new Answer(0,1,"Ai vậy", 0),
+
+                            new Answer(0,2,"Tôi khỏe", 0),
+                            new Answer(0,2,"Chào buổi sáng", 1),
+                            new Answer(0,2,"Xin chào", 0),
+                            new Answer(0,2,"Rất vui gặp bạn", 0),
+
+                            new Answer(0,3,"Rất vui gặp bạn", 0),
+                            new Answer(0,3,"Chào buổi chiều", 1),
+                            new Answer(0,3,"Bạn là ai", 0),
+                            new Answer(0,3,"Xin chào", 0),
+
+                            new Answer(0,4,"meet", 1),
+
+                            new Answer(0,5,"name", 1),
+
+                            new Answer(0,6,"Bạn làm nghề gì", 1),
+                            new Answer(0,6,"Bạn đến từ đâu", 0),
+                            new Answer(0,6,"Bạn tên gì", 0),
+                            new Answer(0,6,"Bạn bao nhiều tuổi", 0),
+
+                            new Answer(0,7,"What is your name", 0),
+                            new Answer(0,7,"Where are you from", 0),
+                            new Answer(0,7,"I'm fine, thanks", 1),
+                            new Answer(0,7,"Are you ok", 0),
+
+                            new Answer(0,8,"I study information technology", 1),
+                            new Answer(0,8,"I'm teacher", 0),
+                            new Answer(0,8,"I am a student", 0),
+                            new Answer(0,8,"I learn English", 0),
+
+                            new Answer(0,9,"Are you ok", 0),
+                            new Answer(0,9,"I'm fine, thanks", 1),
+                            new Answer(0,9,"Who are you", 0),
+                            new Answer(0,9,"Where are you from", 0),
+
+                            new Answer(0,10,"Bạn làm nghề gì", 0),
+                            new Answer(0,10,"Bạn đến từ đâu", 0),
+                            new Answer(0,10,"Bạn tên gì", 0),
+                            new Answer(0,10,"Bạn đang làm gì", 1),
+
+
+
+
+                    };
+            for(int i=0;i<answer.length;i++){
+                engLishAppDatabaseAdapter.insertAnswer(answer[i].getId_question(),answer[i].getAnswer(),answer[i].getCorrect());
+            }
+
         }
 
 
         try {
+            User.users = engLishAppDatabaseAdapter.getRowUser();
             Topic.topics =engLishAppDatabaseAdapter.getRowTopic();
 
         } catch (JSONException e) {

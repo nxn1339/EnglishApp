@@ -26,8 +26,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText txtUserName;
     private TextInputEditText txtPassword;
 
-
-    private
     EngLishAppDatabaseAdapter engLishAppDatabaseAdapter;
     private Context context;
     public static User user = new User();
@@ -54,13 +52,6 @@ public class LoginActivity extends AppCompatActivity {
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
             String userName = sharedPreferences.getString("USERNAME", "");
             String password = sharedPreferences.getString("PASSWORD", "");
-            int id_user = sharedPreferences.getInt("ID_USER",1);
-            String lv = sharedPreferences.getString("LV", "");
-            user.setID(id_user);
-            user.setUser_name("");
-            user.setPassword("");
-            user.setRole("");
-            user.setLv(lv);
 
             if(checkLogin(userName,password)==true){
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
@@ -100,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                     Utils.showToast(getBaseContext(), "Tài khoản mật khẩu không chính xác !");
                 }
 
+
            }
         });
 
@@ -121,22 +113,30 @@ public class LoginActivity extends AppCompatActivity {
 
     //kiểm tra đăng nhập
     private Boolean checkLogin(String userName,String password){
+        //Lấy dữ liệu
+        try {
+            User.users = engLishAppDatabaseAdapter.getRowUser();
+        } catch (JSONException e) {
+            Log.i("Lỗi ở đăng nhập","Sửa đi");
+            e.printStackTrace();
+        }
         for (int i=0;i<User.users.toArray().length;i++){
             if(userName.equals(User.users.get(i).getUser_name()) && password.equals(User.users.get(i).getPassword())){
                 //lưu user cho lần sau
-                saveUser(userName,password,User.users.get(i).getID(),User.users.get(i).getLv());
+                saveUser(userName,password);
+                user.setID(User.users.get(i).getID());
+                user.setLv(User.users.get(i).getLv());
+                Log.i("AAAAAAAAA",String.valueOf(User.users.get(i).getID()));
                 return true;
             }
         }
         return false;
     }
-    private  void saveUser(String userName,String password,int id_user,String lv){
+    private  void saveUser(String userName,String password){
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor user = sharedPreferences.edit();
         user.putString("USERNAME", userName); // Lưu một chuỗi với khóa "key"
         user.putString("PASSWORD", password); // Lưu một chuỗi với khóa "key"
-        user.putInt("ID_USER",id_user);
-        user.putString("LV",lv);
         user.apply(); // Áp dụng các thay đổi vào Shared Preferences
     }
 

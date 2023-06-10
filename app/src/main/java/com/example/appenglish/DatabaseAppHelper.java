@@ -22,6 +22,7 @@ public class DatabaseAppHelper extends SQLiteOpenHelper {
             _db.execSQL(Database.DATABASE_CREATE_TOPIC);
             _db.execSQL(Database.DATABASE_CREATE_USER_TOPIC);
             _db.execSQL(Database.DATABASE_CREATE_QUESTION);
+            _db.execSQL(Database.DATABASE_CREATE_ANSWER);
         }catch(Exception er){
             Log.e("Error","exceptioin");
         }
@@ -34,6 +35,7 @@ public class DatabaseAppHelper extends SQLiteOpenHelper {
         _db.execSQL("DROP TABLE IF EXISTS " + Database.TABLE_TOPIC);
         _db.execSQL("DROP TABLE IF EXISTS " + Database.TABLE_USER_TOPIC);
         _db.execSQL("DROP TABLE IF EXISTS " + Database.TABLE_QUESTION);
+        _db.execSQL("DROP TABLE IF EXISTS " + Database.TABLE_ANSWER);
         // Tạo một database mới.
         onCreate(_db);
     }

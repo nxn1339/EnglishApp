@@ -17,9 +17,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.appenglish.Model.EngLishAppDatabaseAdapter;
 import com.example.appenglish.Model.PlayScreen;
 import com.example.appenglish.Model.Topic;
+import com.example.appenglish.Model.User;
 import com.example.appenglish.Model.UserTopic;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +32,8 @@ public class FragmentHome extends Fragment {
     private RecyclerView rcvPlayScreen;
     private View view;
     private TextView tvLevel;
-
     private PlayAdapter playAdapter;
-
-
+    EngLishAppDatabaseAdapter engLishAppDatabaseAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,10 +45,18 @@ public class FragmentHome extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         rcvPlayScreen.setLayoutManager(linearLayoutManager);
         playAdapter = new PlayAdapter();
+        //Lấy dữ liệu
+        try {
+            User.users = engLishAppDatabaseAdapter.getRowUser();
+            Topic.topics =engLishAppDatabaseAdapter.getRowTopic();
+            UserTopic.userTopics =engLishAppDatabaseAdapter.getRowUserTopic();
+        } catch (JSONException e) {
+            Log.i("Lỗi ở đăng nhập","Sửa đi");
+            e.printStackTrace();
+        }
         playAdapter.setData(getListPlayScreen(), new PlayAdapter.IClickPlayLevelListener() {
             @Override
             public void onClickPlayLevel(ImageView imgPlay, PlayScreen playScreen) {
-                Toast.makeText(getContext(),String.valueOf(playScreen.getID()), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getActivity(), LearningScreen.class);
                 intent.putExtra("id",String.valueOf(playScreen.getID()));
                 startActivity(intent);
