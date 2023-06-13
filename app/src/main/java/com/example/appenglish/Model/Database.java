@@ -42,13 +42,15 @@ public class Database {
             "\tPRIMARY KEY(\"id_question\" AUTOINCREMENT),\n" +
             "\tFOREIGN KEY(\"id_topic\") REFERENCES \"Topic\"(\"id_topic\")\n" +
             ");";
-    public static final String DATABASE_CREATE_ANSWER= "create table "+TABLE_ANSWER+"(\n" +
+    public static final String DATABASE_CREATE_ANSWER= "create table "+TABLE_ANSWER+" (\n" +
             "\t\"id_answer\"\tINTEGER NOT NULL,\n" +
             "\t\"id_question\"\tINTEGER DEFAULT NULL,\n" +
+            "\t\"id_topic\"\tINTEGER DEFAULT NULL,\n" +
             "\t\"answer\"\tTEXT,\n" +
             "\t\"correct\"\tINTEGER,\n" +
-            "\tPRIMARY KEY(\"id_answer\" AUTOINCREMENT),\n" +
-            "\tFOREIGN KEY(\"id_question\") REFERENCES \"Question\"(\"id_question\")\n" +
+            "\tFOREIGN KEY(\"id_topic\") REFERENCES \"Topic\"(\"id_topic\"),\n" +
+            "\tFOREIGN KEY(\"id_question\") REFERENCES \"Question\"(\"id_question\"),\n" +
+            "\tPRIMARY KEY(\"id_answer\" AUTOINCREMENT)\n" +
             ");";
 
     private static final String TAG = "EngLishAppDatabaseAdapter";

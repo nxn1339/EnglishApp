@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="8dp"
+    android:layout_marginBottom="20dp">
+    <RelativeLayout
+        android:id="@+id/RLnotify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/correct"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/imgAnswer"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/answer"></ImageView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/imgAnswer"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvAnserCorrect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:text="Đáp án đúng " />
+
+            <Button
+                android:id="@+id/btnContinue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tiếp tục" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

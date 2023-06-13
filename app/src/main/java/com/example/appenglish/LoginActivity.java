@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
 //                engLishAppDatabaseAdapter.truncateTable();
                 if(checkLogin(txtUserName.getText().toString().trim(),txtPassword.getText().toString().trim())==true){
                     //tạo accivity home
-                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     Utils.showToast(getBaseContext(), "Đăng nhập thành công !");
                     //đi đến activity home
                     startActivity(intent);

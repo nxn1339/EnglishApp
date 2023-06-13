@@ -6,6 +6,16 @@ public class Answer {
     public static ArrayList<Answer> answers=new ArrayList<>();
     private int id_answer;
     private int id_question;
+    private int id_topic;
+
+    public int getId_topic() {
+        return id_topic;
+    }
+
+    public void setId_topic(int id_topic) {
+        this.id_topic = id_topic;
+    }
+
     private String answer;
 
     private int correct;
@@ -46,9 +56,10 @@ public class Answer {
         this.answer = answer;
     }
 
-    public Answer(int id_answer, int id_question, String answer, int correct) {
+    public Answer(int id_answer, int id_question, int id_topic, String answer, int correct) {
         this.id_answer = id_answer;
         this.id_question = id_question;
+        this.id_topic = id_topic;
         this.answer = answer;
         this.correct = correct;
     }

@@ -1,9 +1,12 @@
 package com.example.appenglish;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,25 +16,27 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.appenglish.Model.Answer;
 import com.example.appenglish.Model.EngLishAppDatabaseAdapter;
 import com.example.appenglish.Model.Question;
+import com.example.appenglish.Model.UserTopic;
 import com.example.appenglish.Utils.Utils;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 
 public class LearningScreen extends AppCompatActivity {
-    TextView textView;
+    TextView textView,tvAnswerCorrect;
     Button btnVerify, btnAnswer1, btnAnswer2, btnAnswer3, btnAnswer4;
     LinearLayout lineSelect, lineInput;
     ProgressBar progressBar;
-
+    RelativeLayout RLnotify;
     ImageView imgViewClose;
     EngLishAppDatabaseAdapter engLishAppDatabaseAdapter;
-
+    private PlayAdapter playAdapter;
     EditText txtAnswer;
     private int i = 0, index = 100, point = 0, j = 1;
 
@@ -53,9 +58,10 @@ public class LearningScreen extends AppCompatActivity {
         imgViewClose = findViewById(R.id.imgViewClose);
         progressBar = findViewById(R.id.prBarQuestion);
 
+
         try {
             Question.questions = engLishAppDatabaseAdapter.getRowOneTopicQuestion(Integer.parseInt(getIntent().getStringExtra("id")));
-            Answer.answers = engLishAppDatabaseAdapter.getRowAnswer(j);
+            Answer.answers = engLishAppDatabaseAdapter.getRowAnswer(j,Integer.parseInt(getIntent().getStringExtra("id")));
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -90,7 +96,7 @@ public class LearningScreen extends AppCompatActivity {
                             Log.i("Lỗi", "LỖI");
                         }
                     } else {
-                        checkQuestionInput(txtAnswer.getText().toString());
+                        checkQuestionInput(txtAnswer.getText().toString().trim());
                     }
                     // i là số trong array list bắt đầu =0
                     // j là id của câu hỏi bắt đầu = 1
@@ -108,7 +114,7 @@ public class LearningScreen extends AppCompatActivity {
 
                         //lấy câu trả lời cho vào 4 nút
                         try {
-                            Answer.answers = engLishAppDatabaseAdapter.getRowAnswer(j);
+                            Answer.answers = engLishAppDatabaseAdapter.getRowAnswer(j,Integer.parseInt(getIntent().getStringExtra("id")));
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
@@ -142,8 +148,16 @@ public class LearningScreen extends AppCompatActivity {
                     progressBar.setProgress((i + 1) * 10);
                     //hết câu hỏi đưa ra màn hình home
                     if (i == Question.questions.size()) {
-                        Utils.showToast(getApplicationContext(), "Điểm của bạn là: " + point);
-                        finish();
+                        //cập nhật lại điểm của topic
+                        try {
+                            engLishAppDatabaseAdapter.updatePoint(LoginActivity.user.getID(),Integer.parseInt(getIntent().getStringExtra("id")),point);
+                            UserTopic.userTopics =engLishAppDatabaseAdapter.getRowUserTopic();
+                        }
+                        catch (Exception e){
+
+                        }
+                        //show điểm cho người dùng
+                        showDialog();
                     }
                 }
             }
@@ -225,10 +239,10 @@ public class LearningScreen extends AppCompatActivity {
             //trả lời đúng tăng 1 điểm
             point += 1;
             //hiển thị snackbar thông báo đáp án đúng
-            showSnackBar("Đáp án chính xác");
+            showSnackBar("Đáp án chính xác",true);
         } else {
             //hiển thị snackbar thông báo đáp án sai và đưa ra câu trả lời đúng
-            showSnackBar("Đáp án phải là " + correctAnswer);
+            showSnackBar("Đáp án phải là " + correctAnswer,false);
         }
     }
 
@@ -238,22 +252,53 @@ public class LearningScreen extends AppCompatActivity {
             // trả lời đúng tăng 1 điểm
             point += 1;
             //hiển thị snackbar thông báo đáp án đúng
-            showSnackBar("Đáp án chính xác");
+            showSnackBar("Đáp án chính xác",true);
         } else {
             //hiển thị snackbar thông báo đáp án sai và đưa ra câu trả lời đúng
-            showSnackBar("Đáp án phải là " + Answer.answers.get(0).getAnswer());
+            showSnackBar("Đáp án phải là " + Answer.answers.get(0).getAnswer(),false);
         }
     }
 
-    private void showSnackBar(String title) {
-        Snackbar snackbar = Snackbar.make(btnVerify, title, Snackbar.LENGTH_LONG);
-        snackbar.setAction("Tiếp tục", new View.OnClickListener() {
+    private void showSnackBar(String title,Boolean isCorrect) {
+        Snackbar snackbar = Snackbar.make(btnVerify, title, Snackbar.LENGTH_INDEFINITE);
+        View snackbar_custom = getLayoutInflater().inflate(R.layout.snackbar_custom,null);
+        tvAnswerCorrect = snackbar_custom.findViewById(R.id.tvAnserCorrect);
+        RLnotify = snackbar_custom.findViewById(R.id.RLnotify);
+        snackbar.getView().setBackgroundColor(Color.TRANSPARENT);
+        Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) snackbar.getView();
+        (snackbar_custom.findViewById(R.id.btnContinue)).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
+            public void onClick(View v) {
+                snackbar.dismiss();
             }
         });
-        snackbar.setActionTextColor(getResources().getColor(android.R.color.holo_red_light));
+        if(isCorrect==true){
+            RLnotify.setBackgroundColor(getResources().getColor(R.color.correct));
+        }
+        else {
+            RLnotify.setBackgroundColor(getResources().getColor(R.color.wrong));
+        }
+        tvAnswerCorrect.setText(title);
+        snackbarLayout.addView(snackbar_custom,0);
         snackbar.show();
     }
+
+    private void showDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(LearningScreen.this);
+        builder.setTitle("Điểm của bạn");
+        builder.setMessage(String.valueOf(point)+"/10");
+        builder.setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Xử lý khi người dùng nhấn nút Đồng ý
+                //tạo lại acctivity rồi back lại trang home
+                Intent intent =new Intent(LearningScreen.this,HomeActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 }

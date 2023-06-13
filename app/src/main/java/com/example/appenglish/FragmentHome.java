@@ -38,7 +38,7 @@ public class FragmentHome extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view =inflater.inflate(R.layout.fragment_home, container, false);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
         rcvPlayScreen = view.findViewById(R.id.rcvPlayScreen);
         tvLevel = view.findViewById(R.id.tvLevel);
         tvLevel.setText(LoginActivity.user.getLv());
@@ -66,14 +66,15 @@ public class FragmentHome extends Fragment {
         return view;
     }
 
-    private List<PlayScreen> getListPlayScreen(){
+    public static List<PlayScreen> getListPlayScreen(){
         List<PlayScreen> list = new ArrayList<>();
+        list.clear();
         for(int i = 0; i< Topic.topics.size(); i++){
             list.add(new PlayScreen(Topic.topics.get(i).getId_topic(),images(i),Topic.topics.get(i).getTitle(), UserTopic.userTopics.get(i).getPoint() +"/10"));
         }
         return list;
     }
-    private int images(int i){
+    public static int images(int i){
         switch (i){
             case 0:
                 return R.drawable.lv1;

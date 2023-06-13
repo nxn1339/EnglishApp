@@ -159,11 +159,12 @@ public class EngLishAppDatabaseAdapter {
     }
 
     //Answer
-    public String insertAnswer(int id_question,String answer,int correct){
+    public String insertAnswer(int id_question,int id_topic,String answer,int correct){
         try {
             ContentValues newValues = new ContentValues();
             // Gán dữ liệu cho mỗi cột.
             newValues.put("id_question", id_question);
+            newValues.put("id_topic", id_topic);
             newValues.put("answer", answer);
             newValues.put("correct", correct);
             // Insert hàng dữ liệu vào table
@@ -285,16 +286,17 @@ public class EngLishAppDatabaseAdapter {
     }
 
     //Answer
-    public static ArrayList<Answer> getRowAnswer(int id_question) throws JSONException {
+    public static ArrayList<Answer> getRowAnswer(int id_question,int id_topic) throws JSONException {
         Answer.answers.clear();
         Answer answer;
         db=dbHelper.getReadableDatabase();
-        Cursor projCursor = db.rawQuery("SELECT * FROM '"+Database.TABLE_ANSWER+"' WHERE id_question = '"+ id_question +"'",null);
+        Cursor projCursor = db.rawQuery("SELECT * FROM '"+Database.TABLE_ANSWER+"' WHERE id_question = '"+ id_question +"' AND id_topic = '"+ id_topic +"'",null);
         while (projCursor.moveToNext()) {
 
             answer = new Answer();
             answer.setId_answer(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_answer"))));
             answer.setId_question(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_question"))));
+            answer.setId_topic(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_topic"))));
             answer.setAnswer(projCursor.getString(projCursor.getColumnIndexOrThrow("answer")));
             answer.setCorrect(projCursor.getInt(projCursor.getColumnIndexOrThrow("correct")));
             Answer.answers.add(answer);
@@ -342,5 +344,28 @@ public class EngLishAppDatabaseAdapter {
         Topic.topics.clear();
         UserTopic.userTopics.clear();
         Toast.makeText(context.getApplicationContext(),"Xóa tất cả thành công!",Toast.LENGTH_LONG).show();
+    }
+
+    //Update
+
+    // Phương thức Update các bản ghi trong Table
+    public static String updatePoint(int id_user,int id_topic,int point)
+    {
+        try {
+            ContentValues updatedValues = new ContentValues();
+            updatedValues.put("id_user",id_user);
+            updatedValues.put("id_topic",id_topic);
+            updatedValues.put("point",point);
+            String where="id_user=? AND id_topic=?";
+            String [] whereArgs = new String[]{String.valueOf(id_user),String.valueOf(id_topic)};
+            db=dbHelper.getReadableDatabase();
+            db.update(Database.TABLE_USER_TOPIC,updatedValues, where,whereArgs);
+            db.close();
+        }
+        catch (Exception e){
+
+        }
+        return "ok";
+
     }
 }

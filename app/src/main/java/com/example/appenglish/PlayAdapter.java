@@ -1,20 +1,15 @@
 package com.example.appenglish;
 
-import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appenglish.Model.PlayScreen;
-import com.example.appenglish.Model.Topic;
 
 import java.util.List;
 
