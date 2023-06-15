@@ -33,6 +33,8 @@ public class FragmentHome extends Fragment {
     private View view;
     private TextView tvLevel;
     private PlayAdapter playAdapter;
+
+    private int lv;
     EngLishAppDatabaseAdapter engLishAppDatabaseAdapter;
 
     @Override
@@ -41,7 +43,6 @@ public class FragmentHome extends Fragment {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         rcvPlayScreen = view.findViewById(R.id.rcvPlayScreen);
         tvLevel = view.findViewById(R.id.tvLevel);
-        tvLevel.setText(LoginActivity.user.getLv());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         rcvPlayScreen.setLayoutManager(linearLayoutManager);
         playAdapter = new PlayAdapter();
@@ -50,10 +51,12 @@ public class FragmentHome extends Fragment {
             User.users = engLishAppDatabaseAdapter.getRowUser();
             Topic.topics =engLishAppDatabaseAdapter.getRowTopic();
             UserTopic.userTopics =engLishAppDatabaseAdapter.getRowUserTopic();
+            lv = engLishAppDatabaseAdapter.getRowCountPoint(LoginActivity.user.getID());
         } catch (JSONException e) {
             Log.i("Lỗi ở đăng nhập","Sửa đi");
             e.printStackTrace();
         }
+        tvLevel.setText(String.valueOf(lv));
         playAdapter.setData(getListPlayScreen(), new PlayAdapter.IClickPlayLevelListener() {
             @Override
             public void onClickPlayLevel(ImageView imgPlay, PlayScreen playScreen) {

@@ -15,10 +15,11 @@ public class Database {
             "\t\"id_user\"\tINTEGER NOT NULL,\n" +
             "\t\"user_name\"\ttext NOT NULL UNIQUE,\n" +
             "\t\"password\"\ttext NOT NULL,\n" +
-            "\t\"lv\"\ttext NOT NULL,\n" +
+            "\t\"img_avatar\"\tTEXT,\n" +
+            "\t\"full_name\"\tTEXT,\n" +
             "\t\"role\"\ttext NOT NULL,\n" +
             "\tPRIMARY KEY(\"id_user\" AUTOINCREMENT)\n" +
-            "); ";
+            ");";
     public static final String DATABASE_CREATE_TOPIC = "create table "+TABLE_TOPIC+"(\n" +
             "\t\"id_topic\"\tINTEGER NOT NULL,\n" +
             "\t\"title\"\tTEXT NOT NULL,\n" +

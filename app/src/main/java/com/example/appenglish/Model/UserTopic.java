@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class UserTopic {
     public static ArrayList<UserTopic> userTopics=new ArrayList<>();
+    public static ArrayList<UserTopic> coutPoint=new ArrayList<>();
     private int id_user_topic;
     private int id_user;
     private int id_topic;

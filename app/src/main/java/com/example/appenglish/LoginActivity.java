@@ -48,16 +48,30 @@ public class LoginActivity extends AppCompatActivity {
             Log.i("Lỗi ở đăng nhập","Sửa đi");
             e.printStackTrace();
         }
+        //tạo acc admin
+        if(User.users.size()==0){
+            engLishAppDatabaseAdapter.insertUser("adm","1","","0");
+        }
         try {
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
             String userName = sharedPreferences.getString("USERNAME", "");
             String password = sharedPreferences.getString("PASSWORD", "");
 
             if(checkLogin(userName,password)==true){
-                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                Utils.showToast(getBaseContext(), "Đăng nhập thành công !");
-                //đi đến activity home
-                startActivity(intent);
+                if(user.getRole().trim().equals("1")){
+                    //tạo accivity home
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    Utils.showToast(getBaseContext(), "Đăng nhập thành công !");
+                    //đi đến activity home
+                    startActivity(intent);
+                }
+                else if(user.getRole().trim().equals("0")){
+                    //tạo accivity admin home
+                    Intent intent = new Intent(LoginActivity.this, AdminHome.class);
+                    Utils.showToast(getBaseContext(), "Đăng nhập thành công !");
+                    //đi đến activity home
+                    startActivity(intent);
+                }
             }
         }
         catch (Exception e){
@@ -81,11 +95,21 @@ public class LoginActivity extends AppCompatActivity {
                 }
 //                engLishAppDatabaseAdapter.truncateTable();
                 if(checkLogin(txtUserName.getText().toString().trim(),txtPassword.getText().toString().trim())==true){
-                    //tạo accivity home
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    Utils.showToast(getBaseContext(), "Đăng nhập thành công !");
-                    //đi đến activity home
-                    startActivity(intent);
+                    if(user.getRole().trim().equals("1")){
+                        //tạo accivity home
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        Utils.showToast(getBaseContext(), "Đăng nhập thành công !");
+                        //đi đến activity home
+                        startActivity(intent);
+                    }
+                    else  if(user.getRole().trim().equals("0")){
+                        //tạo accivity admin home
+                        Intent intent = new Intent(LoginActivity.this, AdminHome.class);
+                        Utils.showToast(getBaseContext(), "Đăng nhập thành công !");
+                        //đi đến activity home
+                        startActivity(intent);
+                    }
+
                 }
                 else{
                     Utils.showToast(getBaseContext(), "Tài khoản mật khẩu không chính xác !");
@@ -125,14 +149,16 @@ public class LoginActivity extends AppCompatActivity {
                 //lưu user cho lần sau
                 saveUser(userName,password);
                 user.setID(User.users.get(i).getID());
-                user.setLv(User.users.get(i).getLv());
-                Log.i("AAAAAAAAA",String.valueOf(User.users.get(i).getID()));
+                user.setUser_name(User.users.get(i).getUser_name());
+                user.setFull_name(User.users.get(i).getFull_name());
+                user.setImg_avatar(User.users.get(i).getImg_avatar());
+                user.setRole(User.users.get(i).getRole());
                 return true;
             }
         }
         return false;
     }
-    private  void saveUser(String userName,String password){
+    private void saveUser(String userName, String password){
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor user = sharedPreferences.edit();
         user.putString("USERNAME", userName); // Lưu một chuỗi với khóa "key"

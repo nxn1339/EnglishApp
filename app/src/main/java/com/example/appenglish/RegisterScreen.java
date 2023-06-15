@@ -33,7 +33,6 @@ public class RegisterScreen extends AppCompatActivity {
         btnRegister =(Button) findViewById(R.id.btnRegister);
         // create the instance of Databse
         engLishAppDatabaseAdapter =new EngLishAppDatabaseAdapter(RegisterScreen.this);
-
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,7 +45,7 @@ public class RegisterScreen extends AppCompatActivity {
                     }
                     else{
                         if(txtPassword.getText().toString().trim().equals(txtPasswordAgain.getText().toString().trim())){
-                            engLishAppDatabaseAdapter.insertUser(txtUserName.getText().toString().trim(),txtPassword.getText().toString().trim(),"1","1");
+                            engLishAppDatabaseAdapter.insertUser(txtUserName.getText().toString().trim(),txtPassword.getText().toString().trim(),"","1");
 
                             if(engLishAppDatabaseAdapter.isCheckCreateUser==true){
                                 //Lấy lại dữ liệu sau khi thêm 1 tài khoản mới

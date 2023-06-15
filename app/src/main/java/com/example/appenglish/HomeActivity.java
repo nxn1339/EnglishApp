@@ -1,7 +1,6 @@
 package com.example.appenglish;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -23,21 +22,22 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         releaseInstance(new FragmentHome());
-        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()){
-                case R.id.mn_home:
-                      releaseInstance(new FragmentHome());
-                    break;
-                case R.id.mn_profile:
-                    releaseInstance(new FragmentProfile());
-                    break;
-                case R.id.mn_setting:
-                    releaseInstance(new FragmentSetting());
-                    break;
 
-            }
-            return true;
-        });
+            binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+                switch (item.getItemId()){
+                    case R.id.mn_home:
+                        releaseInstance(new FragmentHome());
+                        break;
+                    case R.id.mn_setting:
+                        releaseInstance(new FragmentSetting());
+                        break;
+                }
+                return true;
+            });
+
+
+
+
     }
 
     private void releaseInstance(FragmentSetting fragmentSetting) {

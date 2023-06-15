@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import com.example.appenglish.DatabaseAppHelper;
 import com.example.appenglish.LoginActivity;
+import com.example.appenglish.Utils.Utils;
+import com.example.appenglish.databinding.ActivityHomeBinding;
 
 import org.json.JSONException;
 
@@ -51,14 +53,14 @@ public class EngLishAppDatabaseAdapter {
     }
     //========================== Phương thức insert ================================
     //User
-    public String insertUser(String user_name, String password, String lv,String role)
+    public String insertUser(String user_name, String password, String img_avatar,String role)
     {
         try {
             ContentValues newValues = new ContentValues();
             // Gán dữ liệu cho mỗi cột.
             newValues.put("user_name", user_name);
             newValues.put("password", password);
-            newValues.put("lv", lv);
+            newValues.put("img_avatar", img_avatar);
             newValues.put("role", role);
 
             // Insert hàng dữ liệu vào table
@@ -200,7 +202,30 @@ public class EngLishAppDatabaseAdapter {
             user.setID(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_user"))));
             user.setUser_name(projCursor.getString(projCursor.getColumnIndexOrThrow("user_name")));
             user.setPassword(projCursor.getString(projCursor.getColumnIndexOrThrow("password")));
-            user.setLv(projCursor.getString(projCursor.getColumnIndexOrThrow("lv")));
+            user.setImg_avatar(projCursor.getString(projCursor.getColumnIndexOrThrow("img_avatar")));
+            user.setFull_name(projCursor.getString(projCursor.getColumnIndexOrThrow("full_name")));
+            user.setRole(projCursor.getString(projCursor.getColumnIndexOrThrow("role")));
+            User.users.add(user);
+        }
+        projCursor.close();
+        return User.users;
+    }
+
+    public static ArrayList<User> getRowUserProfile(int id_user) throws JSONException {
+
+        User.users.clear();
+        User user;
+        db=dbHelper.getReadableDatabase();
+
+        Cursor projCursor = db.rawQuery("SELECT * FROM '"+Database.TABLE_USER+"' WHERE id_user='"+id_user+"'",null);
+        while (projCursor.moveToNext()) {
+
+            user = new User();
+            user.setID(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_user"))));
+            user.setUser_name(projCursor.getString(projCursor.getColumnIndexOrThrow("user_name")));
+            user.setPassword(projCursor.getString(projCursor.getColumnIndexOrThrow("password")));
+            user.setImg_avatar(projCursor.getString(projCursor.getColumnIndexOrThrow("img_avatar")));
+            user.setFull_name(projCursor.getString(projCursor.getColumnIndexOrThrow("full_name")));
             user.setRole(projCursor.getString(projCursor.getColumnIndexOrThrow("role")));
             User.users.add(user);
         }
@@ -308,28 +333,22 @@ public class EngLishAppDatabaseAdapter {
 
 
     //=========================== Phương thức đếm tổng số bản ghi trong Table==============================
-    public int getRowCountUser()
+
+    //Đếm điểm hoàn thành topic
+    public static int getRowCountPoint(int id_user)
     {
-        db=dbHelper.getReadableDatabase();
-        Cursor cursor=db.query(Database.TABLE_USER, null, null, null, null, null, null);
-        db.close();
-        return cursor.getCount();
-    }
-    //Topic
-    public int getRowCountTopic()
-    {
-        db=dbHelper.getReadableDatabase();
-        Cursor cursor=db.query(Database.TABLE_TOPIC, null, null, null, null, null, null);
-        db.close();
-        return cursor.getCount();
-    }
-    //User Topic
-    public int getRowCountUserTopic()
-    {
-        db=dbHelper.getReadableDatabase();
-        Cursor cursor=db.query(Database.TABLE_USER_TOPIC, null, null, null, null, null, null);
-        db.close();
-        return cursor.getCount();
+        int point=0;
+        try{
+            db=dbHelper.getReadableDatabase();
+            Cursor cursor=db.rawQuery("SELECT * FROM '"+Database.TABLE_USER_TOPIC+"' WHERE id_user='"+id_user+"' AND point='10'",null);
+           point = cursor.getCount();
+            cursor.close();
+            db.close();
+        }
+        catch (Exception e){
+            Log.i("NNN",e.toString());
+        }
+        return point;
     }
 
     // Phương thức xoá tất cả các bản ghi trong bảng Table
@@ -349,6 +368,29 @@ public class EngLishAppDatabaseAdapter {
     //Update
 
     // Phương thức Update các bản ghi trong Table
+
+    public static String updateUser(String user_name,String full_name,String password,String img_avatar,Context context)
+    {
+        try {
+            ContentValues updatedValues = new ContentValues();
+            updatedValues.put("user_name",user_name);
+            updatedValues.put("full_name",full_name);
+            updatedValues.put("password",password);
+            updatedValues.put("img_avatar",img_avatar);
+            updatedValues.put("role",1);
+            String where="user_name=?";
+            String [] whereArgs = new String[]{String.valueOf(user_name)};
+            db=dbHelper.getReadableDatabase();
+            db.update(Database.TABLE_USER,updatedValues, where,whereArgs);
+            db.close();
+            Utils.showToast(context,"Thay đổi thành công !");
+        }
+        catch (Exception e){
+           Log.i("GGG",e.toString());
+        }
+        return "ok";
+
+    }
     public static String updatePoint(int id_user,int id_topic,int point)
     {
         try {
