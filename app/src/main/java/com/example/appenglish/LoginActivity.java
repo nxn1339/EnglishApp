@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
             engLishAppDatabaseAdapter.insertUser("adm","1","","0");
         }
         try {
+            //lấy tải khoản mật khẩu đã lưu
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
             String userName = sharedPreferences.getString("USERNAME", "");
             String password = sharedPreferences.getString("PASSWORD", "");
@@ -90,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                     Topic.topics =engLishAppDatabaseAdapter.getRowTopic();
                     UserTopic.userTopics =engLishAppDatabaseAdapter.getRowUserTopic();
                 } catch (JSONException e) {
-                    Log.i("Lỗi ở đăng nhập","Sửa đi");
+                    Log.i("Lỗi ở đăng nhập","AAA");
                     e.printStackTrace();
                 }
 //                engLishAppDatabaseAdapter.truncateTable();

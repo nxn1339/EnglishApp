@@ -410,4 +410,38 @@ public class EngLishAppDatabaseAdapter {
         return "ok";
 
     }
+
+    public static String updateTopic(int id_topic,String title,String img)
+    {
+        try {
+            ContentValues updatedValues = new ContentValues();
+            updatedValues.put("title",title);
+            updatedValues.put("img",img);
+            String where="id_topic=?";
+            String [] whereArgs = new String[]{String.valueOf(id_topic)};
+            db=dbHelper.getReadableDatabase();
+            db.update(Database.TABLE_TOPIC,updatedValues, where,whereArgs);
+            db.close();
+        }
+        catch (Exception e){
+
+        }
+        return "ok";
+
+    }
+
+    public int deleteTopic(int ID)
+    {
+        String where="id_topic=?";
+        int numberOFEntriesDeleted= db.delete(Database.TABLE_TOPIC, where, new String[]{String.valueOf(ID)}) ;
+        Toast.makeText(this.context.getApplicationContext(),"Number fo Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_SHORT).show();
+        return numberOFEntriesDeleted;
+    }
+    public int deleteUserTopic(int ID)
+    {
+        String where="id_topic=?";
+        int numberOFEntriesDeleted= db.delete(Database.TABLE_USER_TOPIC, where, new String[]{String.valueOf(ID)}) ;
+        Toast.makeText(this.context.getApplicationContext(),"Number fo Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_SHORT).show();
+        return numberOFEntriesDeleted;
+    }
 }
