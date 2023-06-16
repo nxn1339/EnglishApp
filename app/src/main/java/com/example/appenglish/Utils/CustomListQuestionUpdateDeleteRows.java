@@ -1,40 +1,36 @@
 package com.example.appenglish.Utils;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 
 import com.example.appenglish.Model.EngLishAppDatabaseAdapter;
-import com.example.appenglish.Model.Topic;
+import com.example.appenglish.Model.Question;
 import com.example.appenglish.R;
-
 import java.util.ArrayList;
 
-public class CustomListAdapterUpdateRows extends BaseAdapter {
+public class CustomListQuestionUpdateDeleteRows extends BaseAdapter {
     Context c;
-    ArrayList<Topic> topics;
-
-    public CustomListAdapterUpdateRows(Context c, ArrayList<Topic> topics) {
+    ArrayList<Question> questions;
+    public CustomListQuestionUpdateDeleteRows(Context c, ArrayList<Question> questions) {
         this.c = c;
-        this.topics = topics;
+        this.questions = questions;
     }
 
     @Override
     public int getCount() {
-        return topics.size();
+        return questions.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return topics.get(i);
+        return questions.get(i);
     }
 
     @Override
@@ -46,16 +42,18 @@ public class CustomListAdapterUpdateRows extends BaseAdapter {
     public View getView(final int i, View view, ViewGroup viewGroup) {
         if(view==null)
         {
-            view= LayoutInflater.from(c).inflate(R.layout.listviewupdate_row,viewGroup,false);
+            view= LayoutInflater.from(c).inflate(R.layout.listview_question_row,viewGroup,false);
         }
 
         final EditText meditText1 = (EditText) view.findViewById(R.id.editText1);
         final EditText meditText2 = (EditText) view.findViewById(R.id.editText2);
+        final EditText meditText3 = (EditText) view.findViewById(R.id.editText3);
         ImageView imgMore = view.findViewById(R.id.imgMore);
 
-        final Topic topic= (Topic) this.getItem(i);
-        meditText1.setText(topic.getTitle());
-        meditText2.setText(topic.getImg());
+        final Question question= (Question) this.getItem(i);
+        meditText1.setText(String.valueOf(question.getId_topic()));
+        meditText2.setText(question.getQuestion());
+        meditText3.setText(String.valueOf(question.getType()));
 
         imgMore.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -67,17 +65,15 @@ public class CustomListAdapterUpdateRows extends BaseAdapter {
                         EngLishAppDatabaseAdapter engLishAppDatabaseAdapter = new EngLishAppDatabaseAdapter(c);
                         switch (item.getItemId()){
                             case R.id.mn_update:
-                                String col1value = meditText1.getText().toString();
+                                int col1value = Integer.parseInt(meditText1.getText().toString());
                                 String col2value = meditText2.getText().toString();
-
-                                engLishAppDatabaseAdapter.updateTopic(topic.getId_topic(),col1value,col2value);
+                                int col3value = Integer.parseInt(meditText3.getText().toString());
+                                engLishAppDatabaseAdapter.updateQuest(question.getId_question(),col1value,col2value,col3value);
                                 break;
                             case R.id.mn_delete:
-                                //xóa liên kết user topic
-                                engLishAppDatabaseAdapter.deleteUserTopic(topic.getId_topic());
                                 //xóa topic
-                                engLishAppDatabaseAdapter.deleteTopic(topic.getId_topic());
-                                topics.remove(i);
+                                engLishAppDatabaseAdapter.deleteQuestion(question.getId_question());
+                                questions.remove(i);
                                 notifyDataSetChanged();
                                 break;
                         }

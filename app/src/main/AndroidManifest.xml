@@ -12,6 +12,12 @@
         android:theme="@style/Theme.AppEnglish"
         tools:targetApi="31">
         <activity
+            android:name=".PackAnswer"
+            android:exported="false" />
+        <activity
+            android:name=".PackQuestion"
+            android:exported="false" />
+        <activity
             android:name=".PackTopic"
             android:exported="false" />
         <activity

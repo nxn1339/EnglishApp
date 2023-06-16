@@ -28,13 +28,27 @@ public class AdminHome extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        btnPackQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminHome.this,PackQuestion.class);
+                startActivity(intent);
+            }
+        });
 
         //nút đăng xuất
         btnLogoutADM.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        btnPackAnswer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminHome.this,PackAnswer.class);
+                startActivity(intent);
             }
         });
     }

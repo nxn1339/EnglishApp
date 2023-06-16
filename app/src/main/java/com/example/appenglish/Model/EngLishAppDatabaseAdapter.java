@@ -330,6 +330,25 @@ public class EngLishAppDatabaseAdapter {
         return Answer.answers;
     }
 
+    public static ArrayList<Answer> getRowAllAnswer() throws JSONException {
+        Answer.answers.clear();
+        Answer answer;
+        db=dbHelper.getReadableDatabase();
+        Cursor projCursor = db.query(Database.TABLE_ANSWER,null,null,null,null,null,null);
+        while (projCursor.moveToNext()) {
+
+            answer = new Answer();
+            answer.setId_answer(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_answer"))));
+            answer.setId_question(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_question"))));
+            answer.setId_topic(Integer.parseInt(projCursor.getString(projCursor.getColumnIndexOrThrow("id_topic"))));
+            answer.setAnswer(projCursor.getString(projCursor.getColumnIndexOrThrow("answer")));
+            answer.setCorrect(projCursor.getInt(projCursor.getColumnIndexOrThrow("correct")));
+            Answer.answers.add(answer);
+        }
+        projCursor.close();
+        return Answer.answers;
+    }
+
 
 
     //=========================== Phương thức đếm tổng số bản ghi trong Table==============================
@@ -429,6 +448,46 @@ public class EngLishAppDatabaseAdapter {
         return "ok";
 
     }
+    public static String updateQuest(int id_question,int id_topic,String question,int type)
+    {
+        try {
+            ContentValues updatedValues = new ContentValues();
+            updatedValues.put("id_topic",id_topic);
+            updatedValues.put("question",question);
+            updatedValues.put("type",type);
+            String where="id_question=?";
+            String [] whereArgs = new String[]{String.valueOf(id_question)};
+            db=dbHelper.getReadableDatabase();
+            db.update(Database.TABLE_QUESTION,updatedValues, where,whereArgs);
+            db.close();
+        }
+        catch (Exception e){
+
+        }
+        return "ok";
+
+    }
+
+    public static String updateAnswer(int id_answer,int id_question,int id_topic,String answer,int correct)
+    {
+        try {
+            ContentValues updatedValues = new ContentValues();
+            updatedValues.put("id_question",id_question);
+            updatedValues.put("id_topic",id_topic);
+            updatedValues.put("answer",answer);
+            updatedValues.put("correct",correct);
+            String where="id_answer=?";
+            String [] whereArgs = new String[]{String.valueOf(id_answer)};
+            db=dbHelper.getReadableDatabase();
+            db.update(Database.TABLE_ANSWER,updatedValues, where,whereArgs);
+            db.close();
+        }
+        catch (Exception e){
+
+        }
+        return "ok";
+
+    }
 
     public int deleteTopic(int ID)
     {
@@ -441,6 +500,22 @@ public class EngLishAppDatabaseAdapter {
     {
         String where="id_topic=?";
         int numberOFEntriesDeleted= db.delete(Database.TABLE_USER_TOPIC, where, new String[]{String.valueOf(ID)}) ;
+        Toast.makeText(this.context.getApplicationContext(),"Number fo Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_SHORT).show();
+        return numberOFEntriesDeleted;
+    }
+
+    public int deleteQuestion(int ID)
+    {
+        String where="id_question=?";
+        int numberOFEntriesDeleted= db.delete(Database.TABLE_QUESTION, where, new String[]{String.valueOf(ID)}) ;
+        Toast.makeText(this.context.getApplicationContext(),"Number fo Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_SHORT).show();
+        return numberOFEntriesDeleted;
+    }
+
+    public int deleteAnswer(int ID)
+    {
+        String where="id_answer=?";
+        int numberOFEntriesDeleted= db.delete(Database.TABLE_ANSWER, where, new String[]{String.valueOf(ID)}) ;
         Toast.makeText(this.context.getApplicationContext(),"Number fo Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_SHORT).show();
         return numberOFEntriesDeleted;
     }

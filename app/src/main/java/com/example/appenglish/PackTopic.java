@@ -15,15 +15,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.bumptech.glide.Glide;
-import com.example.appenglish.Model.Database;
 import com.example.appenglish.Model.EngLishAppDatabaseAdapter;
 import com.example.appenglish.Model.Topic;
 import com.example.appenglish.Model.User;
-import com.example.appenglish.Utils.CustomListAdapterUpdateRows;
+import com.example.appenglish.Utils.CustomListTopicUpdateDeleteRows;
 
 public class PackTopic extends AppCompatActivity {
     static ListView listView ;
-    static CustomListAdapterUpdateRows updateAdapter;
+    static CustomListTopicUpdateDeleteRows updateAdapter;
 
     EditText txtTitle;
     Button btnAdd,btnPickIMG;
@@ -76,14 +75,9 @@ public class PackTopic extends AppCompatActivity {
             }
         });
 
-        updateAdapter = new CustomListAdapterUpdateRows(this, Topic.topics );
+        updateAdapter = new CustomListTopicUpdateDeleteRows(PackTopic.this, Topic.topics );
         listView = (ListView) findViewById(R.id.listupdateviewID);
         listView.setAdapter(updateAdapter);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle("Update User");
-        }
 
     }
     public boolean onOptionsItemSelected(MenuItem item){
