@@ -12,27 +12,27 @@ import android.widget.PopupMenu;
 
 import com.example.appenglish.Model.Answer;
 import com.example.appenglish.Model.EngLishAppDatabaseAdapter;
-import com.example.appenglish.Model.Question;
+import com.example.appenglish.Model.User;
 import com.example.appenglish.R;
 
 import java.util.ArrayList;
 
-public class CustomListAnswerUpdateDeleteRows extends BaseAdapter {
+public class CustomListUserUpdateDeleteRows extends BaseAdapter {
     Context c;
-    ArrayList<Answer> answers;
-    public CustomListAnswerUpdateDeleteRows(Context c, ArrayList<Answer> answers) {
+    ArrayList<User> users;
+    public CustomListUserUpdateDeleteRows(Context c, ArrayList<User> users) {
         this.c = c;
-        this.answers = answers;
+        this.users = users;
     }
 
     @Override
     public int getCount() {
-        return answers.size();
+        return users.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return answers.get(i);
+        return users.get(i);
     }
 
     @Override
@@ -44,20 +44,22 @@ public class CustomListAnswerUpdateDeleteRows extends BaseAdapter {
     public View getView(final int i, View view, ViewGroup viewGroup) {
         if(view==null)
         {
-            view= LayoutInflater.from(c).inflate(R.layout.listview_answer_row,viewGroup,false);
+            view= LayoutInflater.from(c).inflate(R.layout.listview_user_row,viewGroup,false);
         }
 
         final EditText meditText1 = (EditText) view.findViewById(R.id.editText1);
         final EditText meditText2 = (EditText) view.findViewById(R.id.editText2);
         final EditText meditText3 = (EditText) view.findViewById(R.id.editText3);
         final EditText meditText4 = (EditText) view.findViewById(R.id.editText4);
+        final EditText meditText5 = (EditText) view.findViewById(R.id.editText5);
         ImageView imgMore = view.findViewById(R.id.imgMore);
 
-        final Answer answer= (Answer) this.getItem(i);
-        meditText1.setText(String.valueOf(answer.getId_question()));
-        meditText2.setText(String.valueOf(answer.getId_topic()));
-        meditText3.setText(answer.getAnswer());
-        meditText4.setText(String.valueOf(answer.getCorrect()));
+        final User user= (User) this.getItem(i);
+        meditText1.setText(user.getUser_name());
+        meditText2.setText(user.getPassword());
+        meditText3.setText(user.getImg_avatar());
+        meditText4.setText(user.getFull_name());
+        meditText5.setText(user.getRole());
 
         imgMore.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -69,16 +71,19 @@ public class CustomListAnswerUpdateDeleteRows extends BaseAdapter {
                         EngLishAppDatabaseAdapter engLishAppDatabaseAdapter = new EngLishAppDatabaseAdapter(c);
                         switch (item.getItemId()){
                             case R.id.mn_update:
-                                int col1value = Integer.parseInt(meditText1.getText().toString());
-                                int col2value = Integer.parseInt(meditText2.getText().toString());
+                                String col1value = meditText1.getText().toString();
+                                String col2value =meditText2.getText().toString();
                                 String col3value = meditText3.getText().toString();
-                                int col4value = Integer.parseInt(meditText4.getText().toString());
-                                engLishAppDatabaseAdapter.updateAnswer(answer.getId_answer(),col1value,col2value,col3value,col4value);
+                                String col4value = meditText4.getText().toString();
+                                String col5value = meditText5.getText().toString();
+                                engLishAppDatabaseAdapter.updateUserMG(user.getID(),col1value,col2value,col3value,col4value,col5value);
                                 break;
                             case R.id.mn_delete:
-                                //xóa answer
-                                engLishAppDatabaseAdapter.deleteAnswer(answer.getId_answer());
-                                answers.remove(i);
+                                //xóa liên kết user topic
+                                engLishAppDatabaseAdapter.deleteUserTopicMG(user.getID());
+                               //xóa user
+                                engLishAppDatabaseAdapter.deleteUser(user.getID());
+                                users.remove(i);
                                 notifyDataSetChanged();
                                 break;
                         }

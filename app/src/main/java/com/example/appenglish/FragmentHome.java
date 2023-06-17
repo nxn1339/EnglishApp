@@ -53,13 +53,15 @@ public class FragmentHome extends Fragment {
             UserTopic.userTopics =engLishAppDatabaseAdapter.getRowUserTopic();
             lv = engLishAppDatabaseAdapter.getRowCountPoint(LoginActivity.user.getID());
         } catch (JSONException e) {
-            Log.i("Lỗi ở đăng nhập","Sửa đi");
+            Log.i("Lỗi ở home","AAAAA");
             e.printStackTrace();
         }
+        //cấp độ hoàn thành câu hỏi nếu trả lời đúng hết sẽ tăng lên 1
         tvLevel.setText(String.valueOf(lv));
         playAdapter.setData(getListPlayScreen(), new PlayAdapter.IClickPlayLevelListener() {
             @Override
             public void onClickPlayLevel(ImageView imgPlay, PlayScreen playScreen) {
+                //đi đến màn hình học
                 Intent intent = new Intent(getActivity(), LearningScreen.class);
                 intent.putExtra("id",String.valueOf(playScreen.getID()));
                 startActivity(intent);
@@ -69,6 +71,7 @@ public class FragmentHome extends Fragment {
         return view;
     }
 
+    //list màn hình gói câu hỏi
     public static List<PlayScreen> getListPlayScreen(){
         List<PlayScreen> list = new ArrayList<>();
         list.clear();
@@ -77,6 +80,7 @@ public class FragmentHome extends Fragment {
         }
         return list;
     }
+    //ảnh mặc định của gói câu hỏi
     public static int images(int i){
         switch (i){
             case 0:

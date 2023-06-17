@@ -388,7 +388,7 @@ public class EngLishAppDatabaseAdapter {
 
     // Phương thức Update các bản ghi trong Table
 
-    public static String updateUser(String user_name,String full_name,String password,String img_avatar,Context context)
+    public  String updateUser(String user_name,String full_name,String password,String img_avatar)
     {
         try {
             ContentValues updatedValues = new ContentValues();
@@ -405,12 +405,35 @@ public class EngLishAppDatabaseAdapter {
             Utils.showToast(context,"Thay đổi thành công !");
         }
         catch (Exception e){
-           Log.i("GGG",e.toString());
+            Utils.showToast(this.context.getApplicationContext(),"Update không thành công !");
         }
         return "ok";
 
     }
-    public static String updatePoint(int id_user,int id_topic,int point)
+
+    public  String updateUserMG(int id_user,String user_name,String password,String img_avatar,String full_name,String role)
+    {
+        try {
+            ContentValues updatedValues = new ContentValues();
+            updatedValues.put("user_name",user_name);
+            updatedValues.put("full_name",full_name);
+            updatedValues.put("password",password);
+            updatedValues.put("img_avatar",img_avatar);
+            updatedValues.put("role",role);
+            String where="id_user=?";
+            String [] whereArgs = new String[]{String.valueOf(id_user)};
+            db=dbHelper.getReadableDatabase();
+            db.update(Database.TABLE_USER,updatedValues, where,whereArgs);
+            db.close();
+            Utils.showToast(context,"Thay đổi thành công !");
+        }
+        catch (Exception e){
+            Utils.showToast(this.context.getApplicationContext(),"Update không thành công !");
+        }
+        return "ok";
+
+    }
+    public  String updatePoint(int id_user,int id_topic,int point)
     {
         try {
             ContentValues updatedValues = new ContentValues();
@@ -424,13 +447,13 @@ public class EngLishAppDatabaseAdapter {
             db.close();
         }
         catch (Exception e){
-
+            Utils.showToast(this.context.getApplicationContext(),"Update không thành công !");
         }
         return "ok";
 
     }
 
-    public static String updateTopic(int id_topic,String title,String img)
+    public  String updateTopic(int id_topic,String title,String img)
     {
         try {
             ContentValues updatedValues = new ContentValues();
@@ -441,14 +464,15 @@ public class EngLishAppDatabaseAdapter {
             db=dbHelper.getReadableDatabase();
             db.update(Database.TABLE_TOPIC,updatedValues, where,whereArgs);
             db.close();
+            Utils.showToast(this.context.getApplicationContext(),"Update thành công !");
         }
         catch (Exception e){
-
+            Utils.showToast(this.context.getApplicationContext(),"Update không thành công !");
         }
         return "ok";
 
     }
-    public static String updateQuest(int id_question,int id_topic,String question,int type)
+    public  String updateQuest(int id_question,int id_topic,String question,int type)
     {
         try {
             ContentValues updatedValues = new ContentValues();
@@ -460,15 +484,16 @@ public class EngLishAppDatabaseAdapter {
             db=dbHelper.getReadableDatabase();
             db.update(Database.TABLE_QUESTION,updatedValues, where,whereArgs);
             db.close();
+            Utils.showToast(this.context.getApplicationContext(),"Update thành công !");
         }
         catch (Exception e){
-
+            Utils.showToast(this.context.getApplicationContext(),"Update không thành công !");
         }
         return "ok";
 
     }
 
-    public static String updateAnswer(int id_answer,int id_question,int id_topic,String answer,int correct)
+    public  String updateAnswer(int id_answer,int id_question,int id_topic,String answer,int correct)
     {
         try {
             ContentValues updatedValues = new ContentValues();
@@ -481,9 +506,10 @@ public class EngLishAppDatabaseAdapter {
             db=dbHelper.getReadableDatabase();
             db.update(Database.TABLE_ANSWER,updatedValues, where,whereArgs);
             db.close();
+            Utils.showToast(this.context.getApplicationContext(),"Update thành công !");
         }
         catch (Exception e){
-
+            Utils.showToast(this.context.getApplicationContext(),"Update không thành công !");
         }
         return "ok";
 
@@ -516,6 +542,20 @@ public class EngLishAppDatabaseAdapter {
     {
         String where="id_answer=?";
         int numberOFEntriesDeleted= db.delete(Database.TABLE_ANSWER, where, new String[]{String.valueOf(ID)}) ;
+        Toast.makeText(this.context.getApplicationContext(),"Number fo Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_SHORT).show();
+        return numberOFEntriesDeleted;
+    }
+    public int deleteUser(int ID)
+    {
+        String where="id_user=?";
+        int numberOFEntriesDeleted= db.delete(Database.TABLE_USER, where, new String[]{String.valueOf(ID)}) ;
+        Toast.makeText(this.context.getApplicationContext(),"Number fo Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_SHORT).show();
+        return numberOFEntriesDeleted;
+    }
+    public int deleteUserTopicMG(int ID)
+    {
+        String where="id_user=?";
+        int numberOFEntriesDeleted= db.delete(Database.TABLE_USER_TOPIC, where, new String[]{String.valueOf(ID)}) ;
         Toast.makeText(this.context.getApplicationContext(),"Number fo Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_SHORT).show();
         return numberOFEntriesDeleted;
     }

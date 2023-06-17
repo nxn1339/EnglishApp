@@ -13,6 +13,7 @@ import android.widget.RadioButton;
 import com.example.appenglish.Model.EngLishAppDatabaseAdapter;
 import com.example.appenglish.Model.Question;
 import com.example.appenglish.Utils.CustomListQuestionUpdateDeleteRows;
+import com.example.appenglish.Utils.Utils;
 
 
 public class PackQuestion extends AppCompatActivity {
@@ -42,7 +43,14 @@ public class PackQuestion extends AppCompatActivity {
         btnAddQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                engLishAppDatabaseAdapter.insertQuestion(Integer.parseInt(txtIDTopic.getText().toString().trim()), txtQuestion.getText().toString().trim(), type);
+                if(txtIDTopic.getText().toString().trim().equals("")||txtQuestion.getText().toString().trim().equals("")||type<1 ||type>2){
+                    Utils.showToast(getApplicationContext(),"Dữ liệu của bạn còn thiếu");
+                }
+                else {
+                    engLishAppDatabaseAdapter.insertQuestion(Integer.parseInt(txtIDTopic.getText().toString().trim()), txtQuestion.getText().toString().trim(), type);
+                    //load lại acctivity
+                    recreate();
+                }
             }
         });
         rdBtnSelect.setOnClickListener(new View.OnClickListener() {

@@ -73,6 +73,30 @@
             android:layout_marginTop="50dp"
             android:layout_marginHorizontal="100dp"
             android:text="Thêm" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ccff66"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Tên gói câu hỏi"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="link ảnh"
+                android:textAlignment="center" />
+        </LinearLayout>
+
         <ListView
             android:id="@+id/listupdateviewID"
             android:layout_width="match_parent"

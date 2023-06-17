@@ -85,11 +85,11 @@ public class FragmentSetting extends Fragment {
             public void onClick(View v) {
                 //nếu pass rỗng thì không đổi pass
                 if (txtNewPassword.getText().toString().trim().equals("")) {
-                    engLishAppDatabaseAdapter.updateUser(txtUserNameST.getText().toString().trim(), txtFullName.getText().toString().trim(), User.users.get(0).getPassword(), linkImg, getContext());
+                    engLishAppDatabaseAdapter.updateUser(txtUserNameST.getText().toString().trim(), txtFullName.getText().toString().trim(), User.users.get(0).getPassword(), linkImg);
                 } else {
                     //check mật khẩu hiện tại
                     if (txtPasswordST.getText().toString().trim().equals(User.users.get(0).getPassword())) {
-                        engLishAppDatabaseAdapter.updateUser(txtUserNameST.getText().toString().trim(), txtFullName.getText().toString().trim(), txtNewPassword.getText().toString().trim(), linkImg, getContext());
+                        engLishAppDatabaseAdapter.updateUser(txtUserNameST.getText().toString().trim(), txtFullName.getText().toString().trim(), txtNewPassword.getText().toString().trim(), linkImg);
                     }
                     else {
                         Utils.showToast(getContext(),"Mật khẩu không chính xác !");
