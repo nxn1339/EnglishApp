@@ -113,18 +113,6 @@ public class UserManage extends AppCompatActivity {
         listView3.setAdapter(updateAdapter);
 
     }
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

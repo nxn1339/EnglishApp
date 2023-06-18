@@ -388,7 +388,7 @@ public class EngLishAppDatabaseAdapter {
 
     // Phương thức Update các bản ghi trong Table
 
-    public  String updateUser(String user_name,String full_name,String password,String img_avatar)
+    public static  String updateUser(String user_name,String full_name,String password,String img_avatar,Context context)
     {
         try {
             ContentValues updatedValues = new ContentValues();
@@ -405,13 +405,13 @@ public class EngLishAppDatabaseAdapter {
             Utils.showToast(context,"Thay đổi thành công !");
         }
         catch (Exception e){
-            Utils.showToast(this.context.getApplicationContext(),"Update không thành công !");
+            Utils.showToast(context,"Update không thành công !");
         }
         return "ok";
 
     }
 
-    public  String updateUserMG(int id_user,String user_name,String password,String img_avatar,String full_name,String role)
+    public static  String updateUserMG(int id_user,String user_name,String password,String img_avatar,String full_name,String role,Context context)
     {
         try {
             ContentValues updatedValues = new ContentValues();
@@ -428,12 +428,12 @@ public class EngLishAppDatabaseAdapter {
             Utils.showToast(context,"Thay đổi thành công !");
         }
         catch (Exception e){
-            Utils.showToast(this.context.getApplicationContext(),"Update không thành công !");
+            Utils.showToast(context,"Update không thành công !");
         }
         return "ok";
 
     }
-    public  String updatePoint(int id_user,int id_topic,int point)
+    public static  String updatePoint(int id_user,int id_topic,int point,Context context)
     {
         try {
             ContentValues updatedValues = new ContentValues();
@@ -447,13 +447,12 @@ public class EngLishAppDatabaseAdapter {
             db.close();
         }
         catch (Exception e){
-            Utils.showToast(this.context.getApplicationContext(),"Update không thành công !");
         }
         return "ok";
 
     }
 
-    public  String updateTopic(int id_topic,String title,String img)
+    public static  String updateTopic(int id_topic,String title,String img,Context context)
     {
         try {
             ContentValues updatedValues = new ContentValues();
@@ -464,15 +463,15 @@ public class EngLishAppDatabaseAdapter {
             db=dbHelper.getReadableDatabase();
             db.update(Database.TABLE_TOPIC,updatedValues, where,whereArgs);
             db.close();
-            Utils.showToast(this.context.getApplicationContext(),"Update thành công !");
+            Utils.showToast(context,"Update thành công !");
         }
         catch (Exception e){
-            Utils.showToast(this.context.getApplicationContext(),"Update không thành công !");
+            Utils.showToast(context,"Update không thành công !");
         }
         return "ok";
 
     }
-    public  String updateQuest(int id_question,int id_topic,String question,int type)
+    public static  String updateQuest(int id_question,int id_topic,String question,int type,Context context)
     {
         try {
             ContentValues updatedValues = new ContentValues();
@@ -484,16 +483,16 @@ public class EngLishAppDatabaseAdapter {
             db=dbHelper.getReadableDatabase();
             db.update(Database.TABLE_QUESTION,updatedValues, where,whereArgs);
             db.close();
-            Utils.showToast(this.context.getApplicationContext(),"Update thành công !");
+            Utils.showToast(context,"Update thành công !");
         }
         catch (Exception e){
-            Utils.showToast(this.context.getApplicationContext(),"Update không thành công !");
+            Utils.showToast(context,"Update không thành công !");
         }
         return "ok";
 
     }
 
-    public  String updateAnswer(int id_answer,int id_question,int id_topic,String answer,int correct)
+    public static String updateAnswer(int id_answer,int id_question,int id_topic,String answer,int correct,Context context)
     {
         try {
             ContentValues updatedValues = new ContentValues();
@@ -506,10 +505,10 @@ public class EngLishAppDatabaseAdapter {
             db=dbHelper.getReadableDatabase();
             db.update(Database.TABLE_ANSWER,updatedValues, where,whereArgs);
             db.close();
-            Utils.showToast(this.context.getApplicationContext(),"Update thành công !");
+            Utils.showToast(context,"Update thành công !");
         }
         catch (Exception e){
-            Utils.showToast(this.context.getApplicationContext(),"Update không thành công !");
+            Utils.showToast(context,"Update không thành công !");
         }
         return "ok";
 
@@ -556,6 +555,29 @@ public class EngLishAppDatabaseAdapter {
     {
         String where="id_user=?";
         int numberOFEntriesDeleted= db.delete(Database.TABLE_USER_TOPIC, where, new String[]{String.valueOf(ID)}) ;
+        Toast.makeText(this.context.getApplicationContext(),"Number fo Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_SHORT).show();
+        return numberOFEntriesDeleted;
+    }
+
+    public int deleteQuestionTopic(int ID)
+    {
+        String where="id_topic=?";
+        int numberOFEntriesDeleted= db.delete(Database.TABLE_QUESTION, where, new String[]{String.valueOf(ID)}) ;
+        Toast.makeText(this.context.getApplicationContext(),"Number fo Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_SHORT).show();
+        return numberOFEntriesDeleted;
+    }
+
+    public int deleteAnswerTopic(int ID)
+    {
+        String where="id_topic=?";
+        int numberOFEntriesDeleted= db.delete(Database.TABLE_ANSWER, where, new String[]{String.valueOf(ID)}) ;
+        Toast.makeText(this.context.getApplicationContext(),"Number fo Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_SHORT).show();
+        return numberOFEntriesDeleted;
+    }
+    public int deleteAnswerQuestion(int ID)
+    {
+        String where="id_question=?";
+        int numberOFEntriesDeleted= db.delete(Database.TABLE_ANSWER, where, new String[]{String.valueOf(ID)}) ;
         Toast.makeText(this.context.getApplicationContext(),"Number fo Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_SHORT).show();
         return numberOFEntriesDeleted;
     }

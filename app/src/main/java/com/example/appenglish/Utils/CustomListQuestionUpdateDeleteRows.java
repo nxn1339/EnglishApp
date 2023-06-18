@@ -68,11 +68,14 @@ public class CustomListQuestionUpdateDeleteRows extends BaseAdapter {
                                 int col1value = Integer.parseInt(meditText1.getText().toString());
                                 String col2value = meditText2.getText().toString();
                                 int col3value = Integer.parseInt(meditText3.getText().toString());
-                                engLishAppDatabaseAdapter.updateQuest(question.getId_question(),col1value,col2value,col3value);
+                                engLishAppDatabaseAdapter.updateQuest(question.getId_question(),col1value,col2value,col3value, imgMore.getContext());
                                 break;
                             case R.id.mn_delete:
-                                //xóa topic
+                                //xóa câu trả lời
+                                engLishAppDatabaseAdapter.deleteAnswerQuestion(question.getId_question());
+                                //xóa câu hỏi
                                 engLishAppDatabaseAdapter.deleteQuestion(question.getId_question());
+
                                 questions.remove(i);
                                 notifyDataSetChanged();
                                 break;

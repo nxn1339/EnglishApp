@@ -68,9 +68,13 @@ public class CustomListTopicUpdateDeleteRows extends BaseAdapter {
                                 String col1value = meditText1.getText().toString();
                                 String col2value = meditText2.getText().toString();
 
-                                engLishAppDatabaseAdapter.updateTopic(topic.getId_topic(),col1value,col2value);
+                                engLishAppDatabaseAdapter.updateTopic(topic.getId_topic(),col1value,col2value, imgMore.getContext());
                                 break;
                             case R.id.mn_delete:
+                                //xóa câu trả lời
+                                engLishAppDatabaseAdapter.deleteAnswerTopic(topic.getId_topic());
+                                //xóa câu hỏi
+                                engLishAppDatabaseAdapter.deleteQuestionTopic(topic.getId_topic());
                                 //xóa liên kết user topic
                                 engLishAppDatabaseAdapter.deleteUserTopic(topic.getId_topic());
                                 //xóa topic

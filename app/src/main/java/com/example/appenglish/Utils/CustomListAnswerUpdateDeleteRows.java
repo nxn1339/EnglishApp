@@ -73,7 +73,8 @@ public class CustomListAnswerUpdateDeleteRows extends BaseAdapter {
                                 int col2value = Integer.parseInt(meditText2.getText().toString());
                                 String col3value = meditText3.getText().toString();
                                 int col4value = Integer.parseInt(meditText4.getText().toString());
-                                engLishAppDatabaseAdapter.updateAnswer(answer.getId_answer(),col1value,col2value,col3value,col4value);
+                                //update answer
+                                engLishAppDatabaseAdapter.updateAnswer(answer.getId_answer(),col1value,col2value,col3value,col4value, imgMore.getContext());
                                 break;
                             case R.id.mn_delete:
                                 //xóa answer

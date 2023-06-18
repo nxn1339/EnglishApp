@@ -76,7 +76,7 @@ public class CustomListUserUpdateDeleteRows extends BaseAdapter {
                                 String col3value = meditText3.getText().toString();
                                 String col4value = meditText4.getText().toString();
                                 String col5value = meditText5.getText().toString();
-                                engLishAppDatabaseAdapter.updateUserMG(user.getID(),col1value,col2value,col3value,col4value,col5value);
+                                engLishAppDatabaseAdapter.updateUserMG(user.getID(),col1value,col2value,col3value,col4value,col5value, imgMore.getContext());
                                 break;
                             case R.id.mn_delete:
                                 //xóa liên kết user topic

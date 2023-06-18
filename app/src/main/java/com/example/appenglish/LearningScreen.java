@@ -150,7 +150,7 @@ public class LearningScreen extends AppCompatActivity {
                     if (i == Question.questions.size()) {
                         //cập nhật lại điểm của topic
                         try {
-                            engLishAppDatabaseAdapter.updatePoint(LoginActivity.user.getID(),Integer.parseInt(getIntent().getStringExtra("id")),point);
+                            engLishAppDatabaseAdapter.updatePoint(LoginActivity.user.getID(),Integer.parseInt(getIntent().getStringExtra("id")),point,getApplicationContext());
                             UserTopic.userTopics =engLishAppDatabaseAdapter.getRowUserTopic();
                         }
                         catch (Exception e){
@@ -248,7 +248,8 @@ public class LearningScreen extends AppCompatActivity {
 
     //kiểm tra câu hỏi nhập đáp án
     private void checkQuestionInput(String answer) {
-        if (answer.equals(Answer.answers.get(0).getAnswer().trim())) {
+        //chuyển hết sang chữ thường và check ví dụ: A thành a
+        if (answer.trim().toLowerCase().equals(Answer.answers.get(0).getAnswer().trim().toLowerCase())) {
             // trả lời đúng tăng 1 điểm
             point += 1;
             //hiển thị snackbar thông báo đáp án đúng
@@ -273,9 +274,11 @@ public class LearningScreen extends AppCompatActivity {
             }
         });
         if(isCorrect==true){
+            //đúng chuyển showSnackbar thành màu xanh
             RLnotify.setBackgroundColor(getResources().getColor(R.color.correct));
         }
         else {
+            //sai chuyển showSnackbar thành màu đỏ
             RLnotify.setBackgroundColor(getResources().getColor(R.color.wrong));
         }
         tvAnswerCorrect.setText(title);
