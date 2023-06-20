@@ -31,7 +31,7 @@ import java.util.List;
 public class FragmentHome extends Fragment {
     private RecyclerView rcvPlayScreen;
     private View view;
-    private TextView tvLevel;
+    private TextView tvLevel,tvTopic;
     private PlayAdapter playAdapter;
 
     private int lv;
@@ -43,6 +43,7 @@ public class FragmentHome extends Fragment {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         rcvPlayScreen = view.findViewById(R.id.rcvPlayScreen);
         tvLevel = view.findViewById(R.id.tvLevel);
+        tvTopic = view.findViewById(R.id.tvTopic);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         rcvPlayScreen.setLayoutManager(linearLayoutManager);
         playAdapter = new PlayAdapter();
@@ -58,6 +59,8 @@ public class FragmentHome extends Fragment {
         }
         //cấp độ hoàn thành câu hỏi nếu trả lời đúng hết sẽ tăng lên 1
         tvLevel.setText(String.valueOf(lv));
+        //số lượng topic
+        tvTopic.setText(String.valueOf(Topic.topics.size()));
         playAdapter.setData(getListPlayScreen(), new PlayAdapter.IClickPlayLevelListener() {
             @Override
             public void onClickPlayLevel(ImageView imgPlay, PlayScreen playScreen) {

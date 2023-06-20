@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.example.appenglish.DatabaseAppHelper;
 import com.example.appenglish.LoginActivity;
 import com.example.appenglish.Utils.Utils;
-import com.example.appenglish.databinding.ActivityHomeBinding;
 
 import org.json.JSONException;
 
@@ -77,6 +76,7 @@ public class EngLishAppDatabaseAdapter {
             db.close();
 
         }catch(Exception ex) {
+            Utils.showToast(context,"Thêm không thành công!");
         }
         return "ok";
     }
@@ -93,17 +93,12 @@ public class EngLishAppDatabaseAdapter {
             // Insert hàng dữ liệu vào table
             db = dbHelper.getWritableDatabase();
             long result=db.insert(Database.TABLE_TOPIC, null, newValues);
-            //kiểm tra tạo tài khoản thành công không
-            if((int)result >0){
-                isCheckCreateUser = true;
-            }
-            else {
-                isCheckCreateUser = false;
-            }
+            Utils.showToast(context,"Thêm thành công !");
             Log.i("Thêm tiêu đề:", String.valueOf(result));
             db.close();
 
         }catch(Exception ex) {
+            Utils.showToast(context,"Thêm không thành công!");
         }
         return "ok";
     }
@@ -120,17 +115,11 @@ public class EngLishAppDatabaseAdapter {
             // Insert hàng dữ liệu vào table
             db = dbHelper.getWritableDatabase();
             long result=db.insert(Database.TABLE_USER_TOPIC, null, newValues);
-            //kiểm tra tạo tài khoản thành công không
-            if((int)result >0){
-                isCheckCreateUser = true;
-            }
-            else {
-                isCheckCreateUser = false;
-            }
             Log.i("Thêm Liên kết:", String.valueOf(result));
             db.close();
 
         }catch(Exception ex) {
+            Utils.showToast(context,"Thêm không thành công!");
         }
         return "ok";
     }
@@ -145,17 +134,12 @@ public class EngLishAppDatabaseAdapter {
             // Insert hàng dữ liệu vào table
             db = dbHelper.getWritableDatabase();
             long result=db.insert(Database.TABLE_QUESTION, null, newValues);
-            //kiểm tra tạo tài khoản thành công không
-            if((int)result >0){
-                isCheckCreateUser = true;
-            }
-            else {
-                isCheckCreateUser = false;
-            }
+            Utils.showToast(context,"Thêm thành công !");
             Log.i("Thêm Câu Hỏi:", String.valueOf(result));
             db.close();
 
         }catch(Exception ex) {
+            Utils.showToast(context,"Thêm không thành công!");
         }
         return "ok";
     }
@@ -172,17 +156,12 @@ public class EngLishAppDatabaseAdapter {
             // Insert hàng dữ liệu vào table
             db = dbHelper.getWritableDatabase();
             long result=db.insert(Database.TABLE_ANSWER, null, newValues);
-            //kiểm tra tạo tài khoản thành công không
-            if((int)result >0){
-                isCheckCreateUser = true;
-            }
-            else {
-                isCheckCreateUser = false;
-            }
+            Utils.showToast(context,"Thêm thành công !");
             Log.i("Thêm câu trả lời:", String.valueOf(result));
             db.close();
 
         }catch(Exception ex) {
+            Utils.showToast(context,"Thêm không thành công!");
         }
         return "ok";
     }
@@ -433,15 +412,15 @@ public class EngLishAppDatabaseAdapter {
         return "ok";
 
     }
-    public static  String updatePoint(int id_user,int id_topic,int point,Context context)
+    public static  String updatePoint(int id_user,int id_topic,int point)
     {
         try {
             ContentValues updatedValues = new ContentValues();
             updatedValues.put("id_user",id_user);
             updatedValues.put("id_topic",id_topic);
             updatedValues.put("point",point);
-            String where="id_user=? AND id_topic=?";
-            String [] whereArgs = new String[]{String.valueOf(id_user),String.valueOf(id_topic)};
+            String where="id_user=? AND id_topic=? AND point<?";
+            String [] whereArgs = new String[]{String.valueOf(id_user),String.valueOf(id_topic),String.valueOf(point)};
             db=dbHelper.getReadableDatabase();
             db.update(Database.TABLE_USER_TOPIC,updatedValues, where,whereArgs);
             db.close();

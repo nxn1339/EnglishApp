@@ -1,0 +1,19 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Giao diện của ProgressBar khi chưa có tiến trình -->
+    <item android:id="@android:id/background">
+        <shape>
+            <corners android:radius="10dp" />
+            <solid android:color="#E5E5E5" />
+        </shape>
+    </item>
+
+    <!-- Giao diện của ProgressBar khi có tiến trình -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape>
+                <corners android:radius="10dp" />
+                <solid android:color="#33D957" />
+            </shape>
+        </clip>
+    </item>
+</layer-list>

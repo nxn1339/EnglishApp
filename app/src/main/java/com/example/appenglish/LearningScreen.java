@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,7 +31,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.json.JSONException;
 
 public class LearningScreen extends AppCompatActivity {
-    TextView textView,tvAnswerCorrect;
+    TextView textView, tvAnswerCorrect;
     Button btnVerify, btnAnswer1, btnAnswer2, btnAnswer3, btnAnswer4;
     LinearLayout lineSelect, lineInput;
     ProgressBar progressBar;
@@ -44,6 +46,9 @@ public class LearningScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //full viên màn hình
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_learning_screen);
         textView = findViewById(R.id.tvQuestion);
         btnVerify = findViewById(R.id.btnVerify);
@@ -61,7 +66,7 @@ public class LearningScreen extends AppCompatActivity {
 
         try {
             Question.questions = engLishAppDatabaseAdapter.getRowOneTopicQuestion(Integer.parseInt(getIntent().getStringExtra("id")));
-            Answer.answers = engLishAppDatabaseAdapter.getRowAnswer(j,Integer.parseInt(getIntent().getStringExtra("id")));
+            Answer.answers = engLishAppDatabaseAdapter.getRowAnswer(j, Integer.parseInt(getIntent().getStringExtra("id")));
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -69,6 +74,7 @@ public class LearningScreen extends AppCompatActivity {
         textView.setText(Question.questions.get(i).getQuestion());
         //hiển thì cậu trả lời
         if (Question.questions.get(i).getType() == 1) {
+            Log.i("AAAA",Answer.answers.get(1).getAnswer());
             btnAnswer1.setText(Answer.answers.get(0).getAnswer());
             btnAnswer2.setText(Answer.answers.get(1).getAnswer());
             btnAnswer3.setText(Answer.answers.get(2).getAnswer());
@@ -85,81 +91,23 @@ public class LearningScreen extends AppCompatActivity {
         btnVerify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("HUHU", String.valueOf(index));
-                if (index < 4) {
-                    //check kết quả
-                    if (Question.questions.get(i).getType() == 1) {
-                        //kiểm tra câu hỏi
-                        try {
+
+                //check kết quả
+                if (Question.questions.get(i).getType() == 1) {
+                    //kiểm tra câu hỏi
+                    try {
+                        if (index < 4) {
                             checkQuestion(index);
-                        } catch (Exception e) {
-                            Log.i("Lỗi", "LỖI");
                         }
-                    } else {
-                        checkQuestionInput(txtAnswer.getText().toString().trim());
+
+                    } catch (Exception e) {
+                        Log.i("Lỗi", "LỖI");
                     }
-                    // i là số trong array list bắt đầu =0
-                    // j là id của câu hỏi bắt đầu = 1
-                    j++;
-                    i++;
-                    // nếu là câu hỏi cuối không cần đọc database đưa ra nữa (khi i==Question.questions.size() )
-                    if (i != Question.questions.size()) {
-                        //chuyển màu hover
-                        btnAnswer1.setBackgroundColor(getResources().getColor(R.color.color_no_select));
-                        btnAnswer2.setBackgroundColor(getResources().getColor(R.color.color_no_select));
-                        btnAnswer3.setBackgroundColor(getResources().getColor(R.color.color_no_select));
-                        btnAnswer4.setBackgroundColor(getResources().getColor(R.color.color_no_select));
-                        //hiển thi câu hỏi tiếp theo
-                        textView.setText(Question.questions.get(i).getQuestion());
-
-                        //lấy câu trả lời cho vào 4 nút
-                        try {
-                            Answer.answers = engLishAppDatabaseAdapter.getRowAnswer(j,Integer.parseInt(getIntent().getStringExtra("id")));
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                        if (Question.questions.get(i).getType() == 1) {
-                            //type ==1 thì là chọn 4 đáp án
-                            //type ==2 thì là điền đáp án
-
-                            //reset chọn câu trả lời
-                            index = 100;
-                            btnAnswer1.setText(Answer.answers.get(0).getAnswer());
-                            btnAnswer2.setText(Answer.answers.get(1).getAnswer());
-                            btnAnswer3.setText(Answer.answers.get(2).getAnswer());
-                            btnAnswer4.setText(Answer.answers.get(3).getAnswer());
-
-                            //ẩn hiện chọn đáp án hoặc điền
-                            lineSelect.setVisibility(View.VISIBLE);
-                            lineInput.setVisibility(View.GONE);
-
-                        } else {
-                            //reset câu trả lời
-                            txtAnswer.setText("");
-                            //ẩn hiện chọn đáp án hoặc điền
-                            lineSelect.setVisibility(View.GONE);
-                            lineInput.setVisibility(View.VISIBLE);
-
-                        }
-                    }
-
-                    //thanh câu hỏi
-                    progressBar.setProgress((i + 1) * 10);
-                    //hết câu hỏi đưa ra màn hình home
-                    if (i == Question.questions.size()) {
-                        //cập nhật lại điểm của topic
-                        try {
-                            engLishAppDatabaseAdapter.updatePoint(LoginActivity.user.getID(),Integer.parseInt(getIntent().getStringExtra("id")),point,getApplicationContext());
-                            UserTopic.userTopics =engLishAppDatabaseAdapter.getRowUserTopic();
-                        }
-                        catch (Exception e){
-
-                        }
-                        //show điểm cho người dùng
-                        showDialog();
-                    }
+                } else {
+                    checkQuestionInput(txtAnswer.getText().toString().trim());
                 }
+
+
             }
         });
         //nút câu hỏi 1
@@ -167,10 +115,10 @@ public class LearningScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //dổi mầu hover
-                btnAnswer1.setBackgroundColor(getResources().getColor(R.color.color_select));
-                btnAnswer2.setBackgroundColor(getResources().getColor(R.color.color_no_select));
-                btnAnswer3.setBackgroundColor(getResources().getColor(R.color.color_no_select));
-                btnAnswer4.setBackgroundColor(getResources().getColor(R.color.color_no_select));
+                btnAnswer1.setBackgroundResource(R.drawable.radius_btn_select);
+                btnAnswer2.setBackgroundResource(R.drawable.radius_btn_no_select);
+                btnAnswer3.setBackgroundResource(R.drawable.radius_btn_no_select);
+                btnAnswer4.setBackgroundResource(R.drawable.radius_btn_no_select);
                 //chọn câu hỏi đầu
                 index = 0;
             }
@@ -180,10 +128,10 @@ public class LearningScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //đổi màu hover
-                btnAnswer1.setBackgroundColor(getResources().getColor(R.color.color_no_select));
-                btnAnswer2.setBackgroundColor(getResources().getColor(R.color.color_select));
-                btnAnswer3.setBackgroundColor(getResources().getColor(R.color.color_no_select));
-                btnAnswer4.setBackgroundColor(getResources().getColor(R.color.color_no_select));
+                btnAnswer1.setBackgroundResource(R.drawable.radius_btn_no_select);
+                btnAnswer2.setBackgroundResource(R.drawable.radius_btn_select);
+                btnAnswer3.setBackgroundResource(R.drawable.radius_btn_no_select);
+                btnAnswer4.setBackgroundResource(R.drawable.radius_btn_no_select);
                 //câu hỏi thứ 2
                 index = 1;
 
@@ -194,10 +142,10 @@ public class LearningScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //đổi màu hover
-                btnAnswer1.setBackgroundColor(getResources().getColor(R.color.color_no_select));
-                btnAnswer2.setBackgroundColor(getResources().getColor(R.color.color_no_select));
-                btnAnswer3.setBackgroundColor(getResources().getColor(R.color.color_select));
-                btnAnswer4.setBackgroundColor(getResources().getColor(R.color.color_no_select));
+                btnAnswer1.setBackgroundResource(R.drawable.radius_btn_no_select);
+                btnAnswer2.setBackgroundResource(R.drawable.radius_btn_no_select);
+                btnAnswer3.setBackgroundResource(R.drawable.radius_btn_select);
+                btnAnswer4.setBackgroundResource(R.drawable.radius_btn_no_select);
                 //câu hỏi thứ 3
                 index = 2;
             }
@@ -207,10 +155,10 @@ public class LearningScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //đổi màu hover
-                btnAnswer1.setBackgroundColor(getResources().getColor(R.color.color_no_select));
-                btnAnswer2.setBackgroundColor(getResources().getColor(R.color.color_no_select));
-                btnAnswer3.setBackgroundColor(getResources().getColor(R.color.color_no_select));
-                btnAnswer4.setBackgroundColor(getResources().getColor(R.color.color_select));
+                btnAnswer1.setBackgroundResource(R.drawable.radius_btn_no_select);
+                btnAnswer2.setBackgroundResource(R.drawable.radius_btn_no_select);
+                btnAnswer3.setBackgroundResource(R.drawable.radius_btn_no_select);
+                btnAnswer4.setBackgroundResource(R.drawable.radius_btn_select);
                 //câu hỏi thứ 4
                 index = 3;
             }
@@ -239,10 +187,10 @@ public class LearningScreen extends AppCompatActivity {
             //trả lời đúng tăng 1 điểm
             point += 1;
             //hiển thị snackbar thông báo đáp án đúng
-            showSnackBar("Đáp án chính xác",true);
+            showSnackBar("Đáp án chính xác", true);
         } else {
             //hiển thị snackbar thông báo đáp án sai và đưa ra câu trả lời đúng
-            showSnackBar("Đáp án phải là " + correctAnswer,false);
+            showSnackBar("Đáp án phải là " + correctAnswer, false);
         }
     }
 
@@ -253,16 +201,16 @@ public class LearningScreen extends AppCompatActivity {
             // trả lời đúng tăng 1 điểm
             point += 1;
             //hiển thị snackbar thông báo đáp án đúng
-            showSnackBar("Đáp án chính xác",true);
+            showSnackBar("Đáp án chính xác", true);
         } else {
             //hiển thị snackbar thông báo đáp án sai và đưa ra câu trả lời đúng
-            showSnackBar("Đáp án phải là " + Answer.answers.get(0).getAnswer(),false);
+            showSnackBar("Đáp án phải là " + Answer.answers.get(0).getAnswer(), false);
         }
     }
 
-    private void showSnackBar(String title,Boolean isCorrect) {
+    private void showSnackBar(String title, Boolean isCorrect) {
         Snackbar snackbar = Snackbar.make(btnVerify, title, Snackbar.LENGTH_INDEFINITE);
-        View snackbar_custom = getLayoutInflater().inflate(R.layout.snackbar_custom,null);
+        View snackbar_custom = getLayoutInflater().inflate(R.layout.snackbar_custom, null);
         tvAnswerCorrect = snackbar_custom.findViewById(R.id.tvAnserCorrect);
         RLnotify = snackbar_custom.findViewById(R.id.RLnotify);
         snackbar.getView().setBackgroundColor(Color.TRANSPARENT);
@@ -270,32 +218,93 @@ public class LearningScreen extends AppCompatActivity {
         (snackbar_custom.findViewById(R.id.btnContinue)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // i là số trong array list bắt đầu =0
+                // j là id của câu hỏi bắt đầu = 1
+                j++;
+                i++;
+                // nếu là câu hỏi cuối không cần đọc database đưa ra nữa (khi i==Question.questions.size() )
+                if (i != Question.questions.size()) {
+                    //chuyển màu hover
+                    btnAnswer1.setBackgroundResource(R.drawable.radius_btn_no_select);
+                    btnAnswer2.setBackgroundResource(R.drawable.radius_btn_no_select);
+                    btnAnswer3.setBackgroundResource(R.drawable.radius_btn_no_select);
+                    btnAnswer4.setBackgroundResource(R.drawable.radius_btn_no_select);
+                    //hiển thi câu hỏi tiếp theo
+                    textView.setText(Question.questions.get(i).getQuestion());
+
+                    //lấy câu trả lời cho vào 4 nút
+                    try {
+                        Answer.answers = engLishAppDatabaseAdapter.getRowAnswer(j, Integer.parseInt(getIntent().getStringExtra("id")));
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    if (Question.questions.get(i).getType() == 1) {
+                        //type ==1 thì là chọn 4 đáp án
+                        //type ==2 thì là điền đáp án
+
+                        //reset chọn câu trả lời
+                        index = 100;
+                        btnAnswer1.setText(Answer.answers.get(0).getAnswer());
+                        btnAnswer2.setText(Answer.answers.get(1).getAnswer());
+                        btnAnswer3.setText(Answer.answers.get(2).getAnswer());
+                        btnAnswer4.setText(Answer.answers.get(3).getAnswer());
+
+                        //ẩn hiện chọn đáp án hoặc điền
+                        lineSelect.setVisibility(View.VISIBLE);
+                        lineInput.setVisibility(View.GONE);
+
+                    } else {
+                        //reset câu trả lời
+                        txtAnswer.setText("");
+                        //ẩn hiện chọn đáp án hoặc điền
+                        lineSelect.setVisibility(View.GONE);
+                        lineInput.setVisibility(View.VISIBLE);
+
+                    }
+                }
+
+                //thanh câu hỏi
+                progressBar.setProgress((i + 1) * 10);
+                //hết câu hỏi đưa ra màn hình home
+                if (i == Question.questions.size()) {
+                    //cập nhật lại điểm của topic
+                    try {
+                        engLishAppDatabaseAdapter.updatePoint(LoginActivity.user.getID(), Integer.parseInt(getIntent().getStringExtra("id")), point);
+                        UserTopic.userTopics = engLishAppDatabaseAdapter.getRowUserTopic();
+                    } catch (Exception e) {
+
+                    }
+                    //show điểm cho người dùng
+                    showDialog();
+                }
                 snackbar.dismiss();
             }
         });
-        if(isCorrect==true){
+        if (isCorrect == true) {
             //đúng chuyển showSnackbar thành màu xanh
             RLnotify.setBackgroundColor(getResources().getColor(R.color.correct));
-        }
-        else {
+            (snackbar_custom.findViewById(R.id.btnContinue)).setBackgroundResource(R.drawable.boder_edit_text);
+        } else {
             //sai chuyển showSnackbar thành màu đỏ
             RLnotify.setBackgroundColor(getResources().getColor(R.color.wrong));
+            (snackbar_custom.findViewById(R.id.btnContinue)).setBackgroundResource(R.drawable.boder_edit_text);
         }
         tvAnswerCorrect.setText(title);
-        snackbarLayout.addView(snackbar_custom,0);
+        snackbarLayout.addView(snackbar_custom, 0);
         snackbar.show();
     }
 
-    private void showDialog(){
+    private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(LearningScreen.this);
         builder.setTitle("Điểm của bạn");
-        builder.setMessage(String.valueOf(point)+"/10");
+        builder.setMessage(point + "/"+Question.questions.size());
         builder.setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Xử lý khi người dùng nhấn nút Đồng ý
                 //tạo lại acctivity rồi back lại trang home
-                Intent intent =new Intent(LearningScreen.this,HomeActivity.class);
+                Intent intent = new Intent(LearningScreen.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
             }

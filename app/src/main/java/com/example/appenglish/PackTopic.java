@@ -27,7 +27,7 @@ public class PackTopic extends AppCompatActivity {
 
     EditText txtTitle;
     Button btnAdd,btnPickIMG;
-    ImageView imageView;
+    ImageView imageView,imgBack;
     //ảnh
     private String img ="";
     private static final int REQUEST_SELECT_IMAGE = 1;
@@ -40,6 +40,14 @@ public class PackTopic extends AppCompatActivity {
         btnAdd = findViewById(R.id.btnAdd);
         btnPickIMG = findViewById(R.id.btnPickIMG);
         imageView = findViewById(R.id.imgViewTopic);
+        imgBack = findViewById(R.id.imgBack);
+        //nút back
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         //lấy dữ liệu đầu
         try {
             User.users = engLishAppDatabaseAdapter.getRowUser();

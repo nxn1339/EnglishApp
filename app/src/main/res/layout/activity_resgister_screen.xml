@@ -44,6 +44,7 @@
                 android:id="@+id/txtRGUserName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/boder_edit_text"
                 android:lines="1"
                 android:maxLines="1"
                 android:singleLine="true" />
@@ -68,6 +69,7 @@
                 android:id="@+id/txtRGPassword"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/boder_edit_text"
                 android:lines="1"
                 android:maxLines="1"
                 android:password="true"
@@ -93,6 +95,7 @@
                 android:id="@+id/txtRGPasswordAgain"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/boder_edit_text"
                 android:lines="1"
                 android:maxLines="1"
                 android:password="true"

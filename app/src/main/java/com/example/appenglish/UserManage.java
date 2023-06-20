@@ -16,6 +16,7 @@ import android.widget.RadioButton;
 
 import com.bumptech.glide.Glide;
 import com.example.appenglish.Model.EngLishAppDatabaseAdapter;
+import com.example.appenglish.Model.Question;
 import com.example.appenglish.Model.Topic;
 import com.example.appenglish.Model.User;
 import com.example.appenglish.Utils.CustomListUserUpdateDeleteRows;
@@ -29,8 +30,10 @@ public class UserManage extends AppCompatActivity {
     Button btnPickIMG,btnAddUser;
     EditText txtUserNameMG,txtPasswordMG,txtAnswer;
     RadioButton rdBtnAdmin,rdBtnUser;
-    private int role=100;
+    private int role=1;
     private String img ="";
+
+    ImageView imgBack;
     private static final int REQUEST_SELECT_IMAGE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,21 @@ public class UserManage extends AppCompatActivity {
         txtAnswer = findViewById(R.id.txtAnswer);
         rdBtnAdmin = findViewById(R.id.rdBtnAdmin);
         rdBtnUser = findViewById(R.id.rdBtnUser);
+        imgBack = findViewById(R.id.imgBack);
+        //mặc định không chọn thì là user
+        rdBtnUser.setChecked(true);
+        //nút back
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        try {
+            Question.questions = engLishAppDatabaseAdapter.getRowAllTopicQuestion();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //lấy dữ liệu đầu
 
         try {
@@ -103,9 +121,10 @@ public class UserManage extends AppCompatActivity {
                         //thêm dữ liệu liên kết gói câu hỏi và user
                         engLishAppDatabaseAdapter.insertUserTopic(User.users.get(User.users.size()-1).getID(),Topic.topics.get(i).getId_topic(),0);
                     }
-                    //load lại acctivity
-                    recreate();
+
                 }
+                //load lại acctivity
+                recreate();
             }
         });
 

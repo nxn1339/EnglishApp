@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 
@@ -24,7 +25,8 @@ public class PackAnswer extends AppCompatActivity {
     EditText txtIDQuestion, txtIDTopic, txtAnswer;
     Button btnAddAnswer;
     RadioButton rdBtnCorrect, rdBtnWrong;
-    private int correct = 100;
+    ImageView imgBack;
+    private int correct = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,21 @@ public class PackAnswer extends AppCompatActivity {
         btnAddAnswer = findViewById(R.id.btnAddAnswer);
         rdBtnCorrect = findViewById(R.id.rdBtnCorrect);
         rdBtnWrong = findViewById(R.id.rdBtnWrong);
+        imgBack = findViewById(R.id.imgBack);
+        //mặc định không chọn thì là câu hỏi đúng
+        rdBtnCorrect.setChecked(true);
+        //nút back
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        try {
+            Question.questions = engLishAppDatabaseAdapter.getRowAllTopicQuestion();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         try {
             Answer.answers = engLishAppDatabaseAdapter.getRowAllAnswer();

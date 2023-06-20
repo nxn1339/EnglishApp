@@ -29,6 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginHorizontal="40dp"
+        android:background="@drawable/radius_btn_green"
+        android:textColor="@color/white"
         android:text="Gói câu hỏi" />
 
     <Button
@@ -37,6 +39,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginHorizontal="40dp"
+        android:background="@drawable/radius_btn_green"
+        android:textColor="@color/white"
         android:text="Câu hỏi" />
 
     <Button
@@ -44,6 +48,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="40dp"
+        android:background="@drawable/radius_btn_green"
+        android:textColor="@color/white"
         android:layout_marginTop="10dp"
         android:text="Câu trả lời" />
     <Button
@@ -51,6 +57,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="40dp"
+        android:background="@drawable/radius_btn_green"
+        android:textColor="@color/white"
         android:layout_marginTop="10dp"
         android:text="Tài khoản" />
     <Button
@@ -58,6 +66,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="40dp"
+        android:background="@drawable/radius_btn_logout"
+        android:textColor="@color/white"
         android:layout_marginTop="50dp"
         android:text="Đăng xuất" />
 </LinearLayout>

@@ -12,6 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            app:srcCompat="@drawable/baseline_arrow_back_24" />
 
         <TextView
             android:id="@+id/textView5"
@@ -124,7 +131,7 @@
                     android:id="@+id/rdBtnCorrect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đáp án sai" />
+                    android:text="Đáp án đúng" />
 
                 <RadioButton
                     android:id="@+id/rdBtnWrong"
@@ -132,7 +139,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
-                    android:text="Đáp án đúng" />
+                    android:text="Đáp án sai" />
             </RadioGroup>
 
         </LinearLayout>
@@ -144,6 +151,8 @@
             android:layout_marginHorizontal="100dp"
             android:layout_marginTop="50dp"
             android:layout_weight="1"
+            android:background="@drawable/radius_btn_green"
+            android:textColor="@color/white"
             android:text="Thêm" />
 
 
@@ -192,8 +201,11 @@
             android:layout_height="300dp"
             android:layout_margin="10dp"
             android:padding="10dp"
+            android:layout_marginTop="20dp"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp" />
+
+
 
     </LinearLayout>
 

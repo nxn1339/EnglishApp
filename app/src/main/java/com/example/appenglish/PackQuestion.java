@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import com.example.appenglish.Model.EngLishAppDatabaseAdapter;
@@ -21,6 +22,7 @@ public class PackQuestion extends AppCompatActivity {
     Button btnAddQuestion;
     EditText txtIDTopic,txtQuestion;
     RadioButton rdBtnSelect,tbBtnFill;
+    ImageView imgBack;
     static CustomListQuestionUpdateDeleteRows updateAdapter;
     private int type;
     @Override
@@ -34,6 +36,14 @@ public class PackQuestion extends AppCompatActivity {
         rdBtnSelect = findViewById(R.id.rdBtnSelect);
         tbBtnFill = findViewById(R.id.rdBtnFill);
         listView1 = (ListView) findViewById(R.id.listupdateviewID1);
+        imgBack = findViewById(R.id.imgBack);
+        //nút back
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         try {
             Question.questions = engLishAppDatabaseAdapter.getRowAllTopicQuestion();
         } catch (Exception e) {

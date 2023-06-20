@@ -1,2 +1,2 @@
 # EnglishApp
-App vip nhất thé giới :))
+App của Nguyễn Xuân Ngát

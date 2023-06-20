@@ -12,8 +12,8 @@
     <color name="red">#cc3300</color>
     <color name="backgroud">#00AAEA</color>
     <color name="color_text">#009BB4</color>
-    <color name="color_select">#80bfff</color>
-    <color name="color_no_select">#e6e6e6</color>
-    <color name="correct">#00cc00</color>
-    <color name="wrong">#cc3300</color>
+    <color name="color_select">#D6F5FF</color>
+    <color name="color_no_select">#FFFFFF</color>
+    <color name="correct">#88cc00</color>
+    <color name="wrong">#ff6666</color>
 </resources>

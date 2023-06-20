@@ -25,6 +25,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:padding="10dp"
+            android:progressDrawable="@drawable/progressbar_custom"
             android:layout_height="wrap_content" />
 
         <TextView
@@ -53,7 +54,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="20dp"
                     android:layout_weight="1"
-                    android:background="@color/color_no_select"
+                    android:background="@drawable/radius_btn_no_select"
                     android:padding="30dp"
                     android:text="Button" />
 
@@ -63,7 +64,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="20dp"
                     android:layout_weight="1"
-                    android:background="@color/color_no_select"
+                    android:background="@drawable/radius_btn_no_select"
                     android:padding="30dp"
                     android:text="Button" />
             </LinearLayout>
@@ -80,7 +81,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="20dp"
                     android:layout_weight="1"
-                    android:background="@color/color_no_select"
+                    android:background="@drawable/radius_btn_no_select"
                     android:padding="30dp"
                     android:text="Button" />
 
@@ -90,7 +91,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="20dp"
                     android:layout_weight="1"
-                    android:background="@color/color_no_select"
+                    android:background="@drawable/radius_btn_no_select"
                     android:padding="30dp"
                     android:text="Button" />
             </LinearLayout>
@@ -128,7 +129,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/lineLayout"
-        android:background="@color/backgroud"
+        android:background="@drawable/radius_btn_green"
         android:text="Xác nhận"
         android:textColor="@color/white"
         android:padding="15dp"

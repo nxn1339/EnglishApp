@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.example.appenglish.Model.Answer;
@@ -26,6 +28,9 @@ public class RegisterScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //full viên màn hình
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_resgister_screen);
         txtUserName =(TextInputEditText) findViewById(R.id.txtRGUserName);
         txtPassword =(TextInputEditText) findViewById(R.id.txtRGPassword);
@@ -179,7 +184,7 @@ public class RegisterScreen extends AppCompatActivity {
 
                             new Answer(0,4, 1, "meet", 1),
 
-                            new Answer(0,5, 1, "name", 1),
+                            new Answer(0,5, 1, "name is", 1),
 
                             new Answer(0,6, 1, "Bạn làm nghề gì", 1),
                             new Answer(0,6, 1, "Bạn đến từ đâu", 0),

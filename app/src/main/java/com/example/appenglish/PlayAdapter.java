@@ -55,6 +55,7 @@ public class PlayAdapter extends RecyclerView.Adapter<PlayAdapter.PlayViewHolder
     @Override
     public int getItemCount() {
         if(listPlayScreen!=null){
+            //số lượng topic
             return listPlayScreen.size();
         }
         return 0;

@@ -32,8 +32,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_level"
-            app:tint="#E208E3E3" />
+            android:src="@drawable/icons8_complete" />
 
         <TextView
             android:id="@+id/tvLevel"
@@ -53,18 +52,17 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_point"
-            app:tint="#ffcc00" />
+            android:src="@drawable/icons8_faq_24" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/tvTopic"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:layout_weight="1"
-            android:text="100"
-            android:textColor="#ffcc00"
+            android:text="10"
+            android:textColor="#3D6C0E"
             android:textSize="24sp" />
 
     </LinearLayout>
